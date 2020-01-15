@@ -11,7 +11,7 @@ public class HelloController {
 	@GetMapping
 	@RequestMapping("/teste1")
 	public String testeDeploy() {
-		return "Teste de deploy ok";
+		return "Teste de deploy ok 2";
 	}
 
 }
