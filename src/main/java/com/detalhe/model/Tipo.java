@@ -80,6 +80,5 @@ public class Tipo {
 	public void setCategoriatipo(CategoriaTipo categoriatipo) {
 		this.categoriatipo = categoriatipo;
 	}
-	
 
 }

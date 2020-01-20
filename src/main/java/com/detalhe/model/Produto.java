@@ -28,6 +28,8 @@ public class Produto {
 	private Tipo tipo;
 
 	private Double valor;
+	
+	private Integer padraoPrazoEntrega;
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
@@ -91,5 +93,14 @@ public class Produto {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+
+	public Integer getPadraoPrazoEntrega() {
+		return padraoPrazoEntrega;
+	}
+
+	public void setPadraoPrazoEntrega(Integer padraoPrazoEntrega) {
+		this.padraoPrazoEntrega = padraoPrazoEntrega;
+	}
+	
 
 }

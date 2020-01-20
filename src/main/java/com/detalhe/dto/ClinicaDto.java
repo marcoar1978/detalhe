@@ -23,12 +23,10 @@ public class ClinicaDto {
 	public String getNomeSimp() {
 		return nomeSimp;
 	}
-	
-	public static List<ClinicaDto> converter(List<Clinica> clinicas){
+
+	public static List<ClinicaDto> converter(List<Clinica> clinicas) {
 		return clinicas.stream().map(ClinicaDto::new).collect(Collectors.toList());
-		
-		
-		
+
 	}
 
 }

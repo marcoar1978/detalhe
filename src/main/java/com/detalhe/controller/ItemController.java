@@ -21,13 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.detalhe.model.Pedido;
 import com.detalhe.model.Produto;
 import com.detalhe.model.StatusEntrega;
+import com.detalhe.model.Tipo;
 import com.detalhe.repository.PedidoRepository;
 import com.detalhe.repository.ProdutoRepository;
+import com.detalhe.repository.TipoRepository;
 import com.detalhe.repository.ItemPadraoRepository;
+import com.detalhe.repository.ItemVariavelRepository;
 import com.detalhe.model.ItemPadrao;
+import com.detalhe.model.ItemVariavel;
 import com.detalhe.repository.ItemPadraoRepository;
 import com.detalhe.dto.ItemPadraoDto;
+import com.detalhe.dto.TipoVariavelDto;
 import com.detalhe.form.AddItemPadraoForm;
+import com.detalhe.form.AddItemVariavelForm;
 
 @RestController
 @RequestMapping("/item")
@@ -42,10 +48,16 @@ public class ItemController {
 	@Autowired
 	ItemPadraoRepository itemPadraoRepository;
 
+	@Autowired
+	ItemVariavelRepository itemVariavelRepository;
+
+	@Autowired
+	TipoRepository tipoRepository;
+
 	@PostMapping
 	@RequestMapping("/addItemPadrao")
 	@Transactional
-	public ResponseEntity<List<ItemPadraoDto>> addItemPadrao(@RequestBody AddItemPadraoForm addItemPadraoForm) {
+	public ResponseEntity<?> addItemPadrao(@RequestBody AddItemPadraoForm addItemPadraoForm) {
 		Produto produto = this.produtoRepository.findById(addItemPadraoForm.getProdutoId()).get();
 		Pedido pedido = this.pedidoRepository.getPedido(addItemPadraoForm.getPedidoId());
 		ItemPadrao itemPadrao = new ItemPadrao();
@@ -60,16 +72,56 @@ public class ItemController {
 		ItemPadrao itemPadraoSave = this.itemPadraoRepository.save(itemPadrao);
 		List<ItemPadrao> listaItemPadraoPorPedido = this.itemPadraoRepository.listaItemPadraoPorPedido(pedido.getId());
 
-		return ResponseEntity.ok(ItemPadraoDto.converter(listaItemPadraoPorPedido));
+		return ResponseEntity.ok().build();
 	}
-	
+
 	@DeleteMapping("/delItemPadrao/{itemPadraoId}")
 	@Transactional
-	public ResponseEntity<?> delItemPadrao(@PathVariable Long itemPadraoId){
+	public ResponseEntity<?> delItemPadrao(@PathVariable Long itemPadraoId) {
 		this.itemPadraoRepository.deleteById(itemPadraoId);
-		
+
 		return ResponseEntity.ok().build();
-		
+
+	}
+
+	@PostMapping
+	@RequestMapping("/addItemVariavel")
+	@Transactional
+	public ResponseEntity<?> addItemVariavel(@RequestBody AddItemVariavelForm addItemVariavelForm) {
+		Pedido pedido = this.pedidoRepository.getPedido(addItemVariavelForm.getPedidoIdForm());
+		Tipo tipo = this.tipoRepository.findById(addItemVariavelForm.getTipoIdForm()).get();
+		ItemVariavel itemVariavel = new ItemVariavel();
+		itemVariavel.setPedido(pedido);
+		itemVariavel.setDescricao(addItemVariavelForm.getDescricaoForm());
+		itemVariavel.setTipo(tipo);
+		itemVariavel.setStatusEntrega(StatusEntrega.NAO);
+		itemVariavel.setDataPedido(LocalDate.now());
+		itemVariavel.setQde(addItemVariavelForm.getQdeForm());
+		itemVariavel.setValorUnitario(addItemVariavelForm.getValorForm());
+		itemVariavel.setValorTotal(addItemVariavelForm.getValorForm() * addItemVariavelForm.getQdeForm());
+
+		this.itemVariavelRepository.save(itemVariavel);
+
+		return ResponseEntity.ok().build();
+
+	}
+
+	@DeleteMapping("/delItemVariavel/{itemVariavelId}")
+	@Transactional
+	public ResponseEntity<?> delItemVariavel(@PathVariable Long itemVariavelId) {
+		this.itemVariavelRepository.deleteById(itemVariavelId);
+
+		return ResponseEntity.ok().build();
+
+	}
+
+	@GetMapping
+	@RequestMapping("/listaTipoVariavel")
+	public ResponseEntity<List<TipoVariavelDto>> listaTipoVariavel() {
+		List<Tipo> tipos = this.tipoRepository.listaTipoVariavel();
+
+		return ResponseEntity.ok(TipoVariavelDto.converter(tipos));
+
 	}
 
 }

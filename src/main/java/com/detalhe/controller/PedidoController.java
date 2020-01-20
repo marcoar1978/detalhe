@@ -1,8 +1,7 @@
 package com.detalhe.controller;
 
+import java.time.LocalDate;
 import java.util.List;
-
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +53,9 @@ public class PedidoController {
 	@Transactional
 	public ResponseEntity<Long> abrirPedido() {
 		Pedido pedido = new Pedido();
+		LocalDate hoje = LocalDate.now();
+		LocalDate datePrevista = hoje.plusDays(7);
+		pedido.setDataEntregaPrevista(datePrevista);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);
 
@@ -106,17 +108,32 @@ public class PedidoController {
 		pedido.setObs(pedidoObsForm.getObs());
 		return ResponseEntity.ok(1L);
 	}
-	
+
 	@GetMapping
 	@RequestMapping("/altProtetico")
 	@Transactional
-	public ResponseEntity<Pedido> altProtetico(String pedidoIdForm, String proteticoIdForm){
+	public ResponseEntity<Pedido> altProtetico(String pedidoIdForm, String proteticoIdForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Long proteticoId = Long.parseLong(proteticoIdForm);
 		Protetico protetico = this.proteticoRepository.getById(proteticoId).get();
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setProtetico(protetico);
-		
+
 		return ResponseEntity.ok(pedido);
 	}
+	
+	@GetMapping
+	@RequestMapping("/altDataEntregaPrevista")
+	@Transactional 
+	public ResponseEntity<?> altDataEntregaPrevista(String pedidoIdForm, String diasASomarForm){
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Integer diasASomar = Integer.parseInt(diasASomarForm);
+		LocalDate hoje = LocalDate.now();
+		LocalDate dataPrevista = hoje.plusDays(diasASomar);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		pedido.setDataEntregaPrevista(dataPrevista);
+		
+		return ResponseEntity.ok().build();
+	}
+	
 }
