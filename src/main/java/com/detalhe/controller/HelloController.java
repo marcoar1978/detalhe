@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
 	@GetMapping
-	@RequestMapping("/teste1")
+	@RequestMapping("/teste3")
 	public String testeDeploy() {
-		return "Teste de deploy ok 2";
+		return "Teste de deploy ok 3";
 	}
 
 }
