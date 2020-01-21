@@ -5,7 +5,7 @@ before_install:
   - sudo apt-get update
   - echo "Let's start Maven Package!"
   - chmod +x mvnw
-  - mvn clean package
+  - mvn clean package -DskipTests
   - echo "We are in the Docker folder!"
 script:
   - docker-compose build
