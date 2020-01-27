@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.detalhe.dto.LigaClinicaProdutoDto;
 import com.detalhe.dto.ProdutoDto;
+import com.detalhe.model.LigaClinicaProduto;
 import com.detalhe.model.Produto;
+import com.detalhe.repository.LigaProdutoClinicaRepository;
 import com.detalhe.repository.ProdutoRepository;
 
 
@@ -25,6 +28,9 @@ public class ProdutoController {
 	@Autowired
 	ProdutoRepository produtoRepository; 
 	
+	@Autowired 
+	LigaProdutoClinicaRepository  ligaProdutoClinicaRepository;
+	
 	@GetMapping
 	public ResponseEntity<List<ProdutoDto>> lista(){
 		List<Produto> produtos = this.produtoRepository.listaProdutos();
@@ -32,5 +38,14 @@ public class ProdutoController {
 		return ResponseEntity.ok(ProdutoDto.converter(produtos));
 		
 	}
+	
+	@GetMapping("/listaPorClinica")
+	public ResponseEntity<List<LigaClinicaProdutoDto>> listaPorClinica(String clinicaIdForm){
+		Long clinicaId = Long.parseLong(clinicaIdForm);
+		List<LigaClinicaProduto> lcp = this.ligaProdutoClinicaRepository.listaPorClinica(clinicaId);
+		
+		return ResponseEntity.ok(LigaClinicaProdutoDto.converter(lcp));
+	} 
+	
 
 }
