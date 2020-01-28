@@ -19,6 +19,14 @@ public class DentistaDto {
 		this.nome = dentista.getNome();
 	}
 
+	public Long getClinicaId() {
+		return clinicaId;
+	}
+
+	public void setClinicaId(Long clinicaId) {
+		this.clinicaId = clinicaId;
+	}
+
 	public Long getId() {
 		return id;
 	}
