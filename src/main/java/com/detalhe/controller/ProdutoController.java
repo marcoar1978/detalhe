@@ -20,7 +20,6 @@ import com.detalhe.model.Produto;
 import com.detalhe.repository.LigaProdutoClinicaRepository;
 import com.detalhe.repository.ProdutoRepository;
 
-
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
@@ -45,7 +44,18 @@ public class ProdutoController {
 		List<LigaClinicaProduto> lcp = this.ligaProdutoClinicaRepository.listaPorClinica(clinicaId);
 		
 		return ResponseEntity.ok(LigaClinicaProdutoDto.converter(lcp));
-	} 
+	}
+	
+	@GetMapping("/listaProdutoClinica")
+	public ResponseEntity<List<LigaClinicaProdutoDto>> listaProdutoClinica(){
+		List<LigaClinicaProduto> lcp = this.ligaProdutoClinicaRepository.lista();
+		
+		return ResponseEntity.ok(LigaClinicaProdutoDto.converter(lcp));
+		
+	}
+	
+	
+	
 	
 
 }

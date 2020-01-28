@@ -13,6 +13,9 @@ public interface LigaProdutoClinicaRepository extends JpaRepository<LigaClinicaP
 	@Query("SELECT lcp FROM LigaClinicaProduto lcp WHERE lcp.clinica.id = :clinicaId")
 	public List<LigaClinicaProduto> listaPorClinica(Long clinicaId);
 	
+	@Query("SELECT lcp FROM LigaClinicaProduto lcp ORDER BY lcp.clinica.id, lcp.produto.nome ")
+	public List<LigaClinicaProduto> lista();
+	
 	
 
 }

@@ -65,17 +65,16 @@ public class PedidoController {
 	@GetMapping
 	@RequestMapping("/altClinica")
 	@Transactional
-	public ResponseEntity<List<DentistaDto>> altClinica(String pedidoIdForm, String clinicaIdForm) {
+	public ResponseEntity<?> altClinica(String pedidoIdForm, String clinicaIdForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Long clinicaId = Long.parseLong(clinicaIdForm);
 		Clinica clinica = this.clinicaRepository.findById(clinicaId).get();
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setClinica(clinica);
 		pedido.setDesconto(clinica.getDesconto());
+	
 
-		List<Dentista> dentistas = this.dentistaRepository.listaDentistas(clinica);
-
-		return ResponseEntity.ok(DentistaDto.converter(dentistas));
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping

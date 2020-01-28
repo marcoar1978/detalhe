@@ -8,11 +8,14 @@ import com.detalhe.model.Dentista;
 public class DentistaDto {
 
 	private Long id;
+	
+	private Long clinicaId;
 
 	private String nome;
 
 	public DentistaDto(Dentista dentista) {
 		this.id = dentista.getId();
+		this.clinicaId = dentista.getClinica().getId();
 		this.nome = dentista.getNome();
 	}
 

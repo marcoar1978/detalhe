@@ -12,8 +12,8 @@ import com.detalhe.model.Dentista;;
 
 public interface DentistaRepository extends JpaRepository<Dentista, Long> {
 	
-	@Query("SELECT d FROM Dentista d where d.clinica = :clinica ORDER BY d.nome")
-	public List<Dentista> listaDentistas(@Param("clinica") Clinica clinica);
+	@Query("SELECT d FROM Dentista d ORDER BY d.nome")
+	public List<Dentista> listaDentistas();
 	
 	public Optional<Dentista> findById(Long id);
 
