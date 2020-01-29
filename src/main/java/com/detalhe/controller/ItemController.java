@@ -75,10 +75,14 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/delItemPadrao/{itemPadraoId}")
+	@DeleteMapping("/delItemPadrao")
 	@Transactional
-	public ResponseEntity<?> delItemPadrao(@PathVariable Long itemPadraoId) {
-		this.itemPadraoRepository.deleteById(itemPadraoId);
+	public ResponseEntity<?> delItemPadrao(String pedidoIdForm, String produtoIdForm ) {
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Long produtoId = Long.parseLong(produtoIdForm);
+		ItemPadrao itemPadrao = this.itemPadraoRepository.getItemPorProduto(pedidoId, produtoId);
+		
+		this.itemPadraoRepository.deleteById(itemPadrao.getId());
 
 		return ResponseEntity.ok().build();
 

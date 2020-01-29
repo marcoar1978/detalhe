@@ -16,5 +16,8 @@ public interface ItemPadraoRepository extends JpaRepository<ItemPadrao, Long> {
 
 	@Query("SELECT i FROM ItemPadrao i WHERE i.pedido.id = :pedidoId")
 	public List<ItemPadrao> listaItemPadraoPorPedido(@Param("pedidoId") Long pedidoId);
+	
+	@Query("SELECT i FROM ItemPadrao i WHERE i.pedido.id = :pedidoId and i.produto.id = :produtoId")
+	public ItemPadrao getItemPorProduto(@Param("pedidoId") Long pedidoId, @Param("produtoId") Long produtoId);
 
 }
