@@ -75,7 +75,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/delItemPadrao")
+	@GetMapping("/delItemPadrao")
 	@Transactional
 	public ResponseEntity<?> delItemPadrao(String pedidoIdForm, String produtoIdForm ) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
