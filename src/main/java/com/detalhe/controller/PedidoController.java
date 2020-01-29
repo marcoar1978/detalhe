@@ -55,6 +55,8 @@ public class PedidoController {
 		Pedido pedido = new Pedido();
 		LocalDate hoje = LocalDate.now();
 		LocalDate datePrevista = hoje.plusDays(7);
+		pedido.setDataCad(hoje);
+		pedido.setDataPedido(hoje);
 		pedido.setDataEntregaPrevista(datePrevista);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);

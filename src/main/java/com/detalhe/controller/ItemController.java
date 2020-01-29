@@ -67,8 +67,8 @@ public class ItemController {
 		itemPadrao.setStatusEntrega(StatusEntrega.NAO);
 		itemPadrao.setDataPedido(LocalDate.now());
 		itemPadrao.setQde(addItemPadraoForm.getQdeProdutoPadrao());
-		itemPadrao.setValorUnitario(produto.getValor());
-		itemPadrao.setValorTotal(produto.getValor() * addItemPadraoForm.getQdeProdutoPadrao());
+		itemPadrao.setValorUnitario(addItemPadraoForm.getValorUnitario());
+		itemPadrao.setValorTotal(addItemPadraoForm.getValorTotal());
 		ItemPadrao itemPadraoSave = this.itemPadraoRepository.save(itemPadrao);
 		List<ItemPadrao> listaItemPadraoPorPedido = this.itemPadraoRepository.listaItemPadraoPorPedido(pedido.getId());
 
