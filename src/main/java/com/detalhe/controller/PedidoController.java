@@ -20,6 +20,7 @@ import com.detalhe.model.Clinica;
 import com.detalhe.model.Dentista;
 import com.detalhe.model.Pedido;
 import com.detalhe.model.Protetico;
+import com.detalhe.model.StatusPedido;
 import com.detalhe.model.Usuario;
 import com.detalhe.repository.UsuarioRepository;
 import com.detalhe.repository.ClinicaRepository;
@@ -73,9 +74,6 @@ public class PedidoController {
 		Clinica clinica = this.clinicaRepository.findById(clinicaId).get();
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setClinica(clinica);
-		pedido.setDesconto(clinica.getDesconto());
-	
-
 		return ResponseEntity.ok().build();
 	}
 
@@ -136,5 +134,34 @@ public class PedidoController {
 		
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping
+	@RequestMapping("/altDesconto")
+	@Transactional 
+	public ResponseEntity<?> altDesconto(String pedidoIdForm, String descontoForm){
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Integer desconto =  Integer.parseInt(descontoForm);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		pedido.setDesconto(desconto);
+			
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping
+	@RequestMapping("/fecharPedido")
+	@Transactional
+	public ResponseEntity<?> fecharPedido(String pedidoIdForm, String valorTotalForm, String valorLiquidoForm){
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Double valorTotal = Double.parseDouble(valorTotalForm);
+		Double valorLiquido = Double.parseDouble(valorLiquidoForm);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		pedido.setValorTotal(valorTotal);
+		pedido.setValorLiquido(valorLiquido);
+		pedido.setStatusPedido(StatusPedido.FECHADO);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	
 	
 }

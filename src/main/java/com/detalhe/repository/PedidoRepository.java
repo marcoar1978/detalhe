@@ -15,5 +15,5 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	
 	@Query("Select p from Pedido p where p.id = :pedidoId")
 	public Pedido getPedido(@Param("pedidoId") Long pedidoId);
-
-}
+	
+	}

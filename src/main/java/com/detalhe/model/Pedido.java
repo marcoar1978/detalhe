@@ -50,6 +50,9 @@ public class Pedido {
 	private String obs;
 
 	private Integer desconto;
+	
+	private Double valorTotal;
+	private Double valorLiquido;
 
 	private LocalDate dataCad = LocalDate.now();
 	private LocalDate dataAlt;
@@ -197,5 +200,22 @@ public class Pedido {
 	public void setProtetico(Protetico protetico) {
 		this.protetico = protetico;
 	}
+
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	public Double getValorLiquido() {
+		return valorLiquido;
+	}
+
+	public void setValorLiquido(Double valorLiquido) {
+		this.valorLiquido = valorLiquido;
+	}
+	
 
 }
