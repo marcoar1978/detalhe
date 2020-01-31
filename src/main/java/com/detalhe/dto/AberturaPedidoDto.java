@@ -8,6 +8,8 @@ public class AberturaPedidoDto {
 	
 	private LocalDate dataPedido;
 
+	
+	
 	public Long getPedidoId() {
 		return pedidoId;
 	}
