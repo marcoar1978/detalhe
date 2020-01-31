@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.detalhe.dto.AberturaPedidoDto;
 import com.detalhe.dto.DentistaDto;
 import com.detalhe.form.PedidoObsForm;
 import com.detalhe.model.Clinica;
@@ -52,7 +53,7 @@ public class PedidoController {
 	@GetMapping
 	@RequestMapping("/abrirPedido")
 	@Transactional
-	public ResponseEntity<Long> abrirPedido() {
+	public ResponseEntity<AberturaPedidoDto> abrirPedido() {
 		Pedido pedido = new Pedido();
 		LocalDate hoje = LocalDate.now();
 		LocalDate datePrevista = hoje.plusDays(7);
@@ -61,8 +62,11 @@ public class PedidoController {
 		pedido.setDataEntregaPrevista(datePrevista);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);
-
-		return ResponseEntity.ok(pedidoAberto.getId());
+		
+		AberturaPedidoDto aberturaPedidoDto = new AberturaPedidoDto();
+		aberturaPedidoDto.setPedidoId(pedidoAberto.getId());
+		aberturaPedidoDto.setDataPedido(pedidoAberto.getDataPedido());
+		return ResponseEntity.ok(aberturaPedidoDto);
 	}
 
 	@GetMapping

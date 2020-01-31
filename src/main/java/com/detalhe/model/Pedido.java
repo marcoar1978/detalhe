@@ -42,7 +42,9 @@ public class Pedido {
 
 	@Enumerated
 	private StatusEntrega statusEntrega = StatusEntrega.NAO;
-
+	
+	private Integer prazo;
+	
 	private LocalDate dataEntregaPrevista;
 
 	private LocalDate dataEntrega;
@@ -216,6 +218,15 @@ public class Pedido {
 	public void setValorLiquido(Double valorLiquido) {
 		this.valorLiquido = valorLiquido;
 	}
+
+	public Integer getPrazo() {
+		return prazo;
+	}
+
+	public void setPrazo(Integer prazo) {
+		this.prazo = prazo;
+	}
+	
 	
 
 }
