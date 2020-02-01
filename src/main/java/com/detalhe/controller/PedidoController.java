@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.detalhe.dto.AberturaPedidoDto;
 import com.detalhe.dto.DentistaDto;
+import com.detalhe.dto.ItemPadraoDto;
+import com.detalhe.dto.PedidoDto;
 import com.detalhe.form.PedidoObsForm;
 import com.detalhe.model.Clinica;
 import com.detalhe.model.Dentista;
+import com.detalhe.model.ItemPadrao;
 import com.detalhe.model.Pedido;
 import com.detalhe.model.Protetico;
 import com.detalhe.model.StatusPedido;
@@ -27,6 +30,7 @@ import com.detalhe.repository.UsuarioRepository;
 import com.detalhe.repository.ClinicaRepository;
 import com.detalhe.repository.PedidoRepository;
 import com.detalhe.repository.DentistaRepository;
+import com.detalhe.repository.ItemPadraoRepository;
 import com.detalhe.repository.ProteticoRepository;
 
 import com.detalhe.service.Acesso;
@@ -49,6 +53,9 @@ public class PedidoController {
 
 	@Autowired
 	ProteticoRepository proteticoRepository;
+	
+	@Autowired
+	ItemPadraoRepository itemPadraoRepository;
 
 	@GetMapping
 	@RequestMapping("/abrirPedido")
@@ -152,15 +159,34 @@ public class PedidoController {
 	}
 	
 	@GetMapping
+	@RequestMapping("/conferirPedido")
+	@Transactional
+	public ResponseEntity<PedidoDto> conferirPedido(String pedidoIdForm, String valorTotalForm, String valorLiquidoForm, String prazoForm){
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Double valorTotal = Double.parseDouble(valorTotalForm);
+		Double valorLiquido = Double.parseDouble(valorLiquidoForm);
+		Integer prazo = Integer.parseInt(prazoForm);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		pedido.setValorTotal(valorTotal);
+		pedido.setValorLiquido(valorLiquido);
+		pedido.setPrazo(prazo);
+		LocalDate dataEntregaPrevista = pedido.getDataPedido().plusDays(prazo);
+		pedido.setDataEntregaPrevista(dataEntregaPrevista);
+		
+		List<ItemPadrao> itensPadrao = this.itemPadraoRepository.listaItemPadraoPorPedido(pedidoId);
+		List<ItemPadraoDto> itemPadraoDto = ItemPadraoDto.converter(itensPadrao);
+		
+		PedidoDto pedidoDto = new PedidoDto(pedido, itemPadraoDto );
+		
+		return ResponseEntity.ok(pedidoDto);
+	}
+	
+	@GetMapping
 	@RequestMapping("/fecharPedido")
 	@Transactional
 	public ResponseEntity<?> fecharPedido(String pedidoIdForm, String valorTotalForm, String valorLiquidoForm){
 		Long pedidoId = Long.parseLong(pedidoIdForm);
-		Double valorTotal = Double.parseDouble(valorTotalForm);
-		Double valorLiquido = Double.parseDouble(valorLiquidoForm);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
-		pedido.setValorTotal(valorTotal);
-		pedido.setValorLiquido(valorLiquido);
 		pedido.setStatusPedido(StatusPedido.FECHADO);
 		
 		return ResponseEntity.ok().build();

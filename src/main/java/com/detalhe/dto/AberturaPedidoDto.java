@@ -7,7 +7,6 @@ public class AberturaPedidoDto {
 	private Long pedidoId;
 	
 	private LocalDate dataPedido;
-
 	
 	
 	public Long getPedidoId() {

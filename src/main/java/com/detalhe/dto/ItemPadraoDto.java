@@ -10,12 +10,14 @@ public class ItemPadraoDto {
 	
 	private Long id;
 	private String descricao;
+	private Integer qde;
 	private Double valorUnitario;
 	private Double valorTotal;
 	
 	public ItemPadraoDto(ItemPadrao itemPadrao) {
 		this.id = itemPadrao.getId();
 		this.descricao = itemPadrao.getProduto().getNome();
+		this.qde = itemPadrao.getQde();
 		this.valorUnitario = itemPadrao.getValorUnitario();
 		this.valorTotal = itemPadrao.getValorTotal();
 	}
@@ -34,6 +36,14 @@ public class ItemPadraoDto {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Integer getQde() {
+		return qde;
+	}
+
+	public void setQde(Integer qde) {
+		this.qde = qde;
 	}
 
 	public Double getValorUnitario() {
