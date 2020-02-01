@@ -21,7 +21,7 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private LocalDate dataPedido = LocalDate.now();
+	private LocalDate dataPedido;
 
 	@ManyToOne
 	@JoinColumn(name = "entrega_id")
@@ -56,7 +56,7 @@ public class Pedido {
 	private Double valorTotal;
 	private Double valorLiquido;
 
-	private LocalDate dataCad = LocalDate.now();
+	private LocalDate dataCad;
 	private LocalDate dataAlt;
 
 	@ManyToOne
