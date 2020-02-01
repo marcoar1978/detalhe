@@ -63,18 +63,18 @@ public class PedidoController {
 	@Transactional
 	public ResponseEntity<AberturaPedidoDto> abrirPedido() {
 		Pedido pedido = new Pedido();
-		ZoneId zid = ZoneId.of("America/Sao_Paulo");
-		LocalDate hoje = LocalDate.now(zid);
-		LocalDate datePrevista = hoje.plusDays(7);
-		pedido.setDataCad(hoje);
-		pedido.setDataPedido(hoje);
-		pedido.setDataEntregaPrevista(datePrevista);
+		//ZoneId zid = ZoneId.of("America/Sao_Paulo");
+		LocalDate hoje = LocalDate.now();
+		//LocalDate datePrevista = hoje.plusDays(7);
+		//pedido.setDataCad(hoje);
+		//pedido.setDataPedido(hoje);
+		//pedido.setDataEntregaPrevista(datePrevista);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);
 		
 		AberturaPedidoDto aberturaPedidoDto = new AberturaPedidoDto();
 		aberturaPedidoDto.setPedidoId(pedidoAberto.getId());
-		aberturaPedidoDto.setDataPedido(pedidoAberto.getDataPedido());
+		aberturaPedidoDto.setDataPedido(hoje);
 		return ResponseEntity.ok(aberturaPedidoDto);
 	}
 
@@ -172,9 +172,13 @@ public class PedidoController {
 		pedido.setValorTotal(valorTotal);
 		pedido.setValorLiquido(valorLiquido);
 		pedido.setPrazo(prazo);
-		LocalDate dataEntregaPrevista = pedido.getDataPedido().plusDays(prazo);
-		pedido.setDataEntregaPrevista(dataEntregaPrevista);
-		
+		ZoneId zid = ZoneId.of("America/Sao_Paulo");
+		LocalDate hoje = LocalDate.now(zid);
+		LocalDate datePrevista = hoje.plusDays(prazo);
+		pedido.setDataCad(hoje);
+		pedido.setDataPedido(hoje);
+		pedido.setDataEntregaPrevista(datePrevista);
+				
 		List<ItemPadrao> itensPadrao = this.itemPadraoRepository.listaItemPadraoPorPedido(pedidoId);
 		List<ItemPadraoDto> itemPadraoDto = ItemPadraoDto.converter(itensPadrao);
 		

@@ -1,6 +1,7 @@
 package com.detalhe.model;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,9 +43,9 @@ public class Pedido {
 
 	@Enumerated
 	private StatusEntrega statusEntrega = StatusEntrega.NAO;
-	
+
 	private Integer prazo;
-	
+
 	private LocalDate dataEntregaPrevista;
 
 	private LocalDate dataEntrega;
@@ -52,7 +53,7 @@ public class Pedido {
 	private String obs;
 
 	private Integer desconto;
-	
+
 	private Double valorTotal;
 	private Double valorLiquido;
 
@@ -66,7 +67,7 @@ public class Pedido {
 	@ManyToOne
 	@JoinColumn(name = "protetico")
 	private Protetico protetico;
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -226,7 +227,5 @@ public class Pedido {
 	public void setPrazo(Integer prazo) {
 		this.prazo = prazo;
 	}
-	
-	
 
 }
