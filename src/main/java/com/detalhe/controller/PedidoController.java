@@ -1,6 +1,7 @@
 package com.detalhe.controller;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,8 @@ public class PedidoController {
 	@Transactional
 	public ResponseEntity<AberturaPedidoDto> abrirPedido() {
 		Pedido pedido = new Pedido();
-		LocalDate hoje = LocalDate.now();
+		ZoneId zid = ZoneId.of("America/Sao_Paulo");
+		LocalDate hoje = LocalDate.now(zid);
 		LocalDate datePrevista = hoje.plusDays(7);
 		pedido.setDataCad(hoje);
 		pedido.setDataPedido(hoje);
