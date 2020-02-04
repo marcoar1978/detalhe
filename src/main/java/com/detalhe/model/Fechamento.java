@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -40,7 +43,8 @@ public class Fechamento {
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
-
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario")
 	private Usuario usuario;

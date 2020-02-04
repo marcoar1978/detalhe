@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 @Entity
@@ -33,7 +35,8 @@ public class Produto {
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
-
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario")
 	private Usuario usuario;

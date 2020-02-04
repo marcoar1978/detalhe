@@ -193,7 +193,7 @@ public class PedidoController {
 	public ResponseEntity<?> fecharPedido(String pedidoIdForm, String valorTotalForm, String valorLiquidoForm){
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
-		pedido.setStatusPedido(StatusPedido.FECHADO);
+		pedido.setStatusPedido(StatusPedido.EM_PROCESSO);
 		
 		return ResponseEntity.ok().build();
 	}

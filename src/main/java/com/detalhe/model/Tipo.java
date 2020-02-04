@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Tipo {
 
@@ -28,7 +30,8 @@ public class Tipo {
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
-
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario")
 	private Usuario usuario;
