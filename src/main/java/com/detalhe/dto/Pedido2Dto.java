@@ -37,6 +37,7 @@ public class Pedido2Dto {
 		this.dataPedido = pedido.getDataPedido();
 		this.clinica = pedido.getClinica().getNome();
 		this.clinicaId = pedido.getClinica().getId();
+		
 		this.dentista = pedido.getDentista().getNome();
 		this.nomePaciente = pedido.getNomePaciente();
 		this.prazo = pedido.getPrazo();
