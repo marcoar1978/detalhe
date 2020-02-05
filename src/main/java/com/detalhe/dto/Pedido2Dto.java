@@ -14,6 +14,7 @@ public class Pedido2Dto {
 	private Long id;
 	private LocalDate dataPedido;
 	private String clinica;
+	private Long clinicaId;
 	private String dentista;
 	private String nomePaciente;
 	private Integer prazo;
@@ -35,6 +36,7 @@ public class Pedido2Dto {
 		this.id = pedido.getId();
 		this.dataPedido = pedido.getDataPedido();
 		this.clinica = pedido.getClinica().getNome();
+		this.clinicaId = pedido.getClinica().getId();
 		this.dentista = pedido.getDentista().getNome();
 		this.nomePaciente = pedido.getNomePaciente();
 		this.prazo = pedido.getPrazo();
@@ -50,6 +52,14 @@ public class Pedido2Dto {
 		this.dataEntrega = pedido.getDataEntrega();
 		this.itensPadrao = ItemPadraoDto.converter(pedido.getItensPadrao());
 
+	}
+
+	public Long getClinicaId() {
+		return clinicaId;
+	}
+
+	public void setClinicaId(Long clinicaId) {
+		this.clinicaId = clinicaId;
 	}
 
 	public Long getId() {
