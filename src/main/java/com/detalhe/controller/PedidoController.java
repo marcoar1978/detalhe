@@ -188,9 +188,29 @@ public class PedidoController {
 	}
 	
 	@GetMapping
+	@RequestMapping("/altDataPedido")
+	@Transactional
+	public ResponseEntity<?> altDataPedido(String pedidoIdForm, String dataPedidoForm, String prazoForm){
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Integer prazo = Integer.parseInt(prazoForm);
+		String[] dataArray =  dataPedidoForm.split("-");
+		Integer ano = Integer.parseInt(dataArray[0]);
+		Integer mes = Integer.parseInt(dataArray[1]);
+		Integer dia = Integer.parseInt(dataArray[2]);
+		LocalDate dataPedido = LocalDate.of(ano, mes, dia);
+		LocalDate dataEntregaPrevista = dataPedido.plusDays(prazo);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		pedido.setDataPedido(dataPedido);
+		pedido.setDataEntregaPrevista(dataEntregaPrevista);
+			
+		
+		return ResponseEntity.ok().build();
+	} 
+	
+	@GetMapping
 	@RequestMapping("/fecharPedido")
 	@Transactional
-	public ResponseEntity<?> fecharPedido(String pedidoIdForm, String valorTotalForm, String valorLiquidoForm){
+	public ResponseEntity<?> fecharPedido(String pedidoIdForm){
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setStatusPedido(StatusPedido.EM_PROCESSO);

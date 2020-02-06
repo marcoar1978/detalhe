@@ -77,11 +77,11 @@ public class ItemController {
 
 	@GetMapping("/delItemPadrao")
 	@Transactional
-	public ResponseEntity<?> delItemPadrao(String pedidoIdForm, String produtoIdForm ) {
+	public ResponseEntity<?> delItemPadrao(String pedidoIdForm, String produtoIdForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Long produtoId = Long.parseLong(produtoIdForm);
 		ItemPadrao itemPadrao = this.itemPadraoRepository.getItemPorProduto(pedidoId, produtoId);
-		
+
 		this.itemPadraoRepository.deleteById(itemPadrao.getId());
 
 		return ResponseEntity.ok().build();
@@ -92,17 +92,18 @@ public class ItemController {
 	@RequestMapping("/addItemVariavel")
 	@Transactional
 	public ResponseEntity<?> addItemVariavel(@RequestBody AddItemVariavelForm addItemVariavelForm) {
-		Pedido pedido = this.pedidoRepository.getPedido(addItemVariavelForm.getPedidoIdForm());
-		Tipo tipo = this.tipoRepository.findById(addItemVariavelForm.getTipoIdForm()).get();
+		Pedido pedido = this.pedidoRepository.getPedido(addItemVariavelForm.getPedidoId());
+		Tipo tipo = this.tipoRepository.findById(addItemVariavelForm.getTipoId()).get();
 		ItemVariavel itemVariavel = new ItemVariavel();
 		itemVariavel.setPedido(pedido);
-		itemVariavel.setDescricao(addItemVariavelForm.getDescricaoForm());
+		itemVariavel.setDescricao(addItemVariavelForm.getDescricao());
+		itemVariavel.setOrdem(addItemVariavelForm.getOrdem());
 		itemVariavel.setTipo(tipo);
 		itemVariavel.setStatusEntrega(StatusEntrega.NAO);
 		itemVariavel.setDataPedido(LocalDate.now());
-		itemVariavel.setQde(addItemVariavelForm.getQdeForm());
-		itemVariavel.setValorUnitario(addItemVariavelForm.getValorForm());
-		itemVariavel.setValorTotal(addItemVariavelForm.getValorForm() * addItemVariavelForm.getQdeForm());
+		itemVariavel.setQde(addItemVariavelForm.getQde());
+		itemVariavel.setValorUnitario(addItemVariavelForm.getValorUnitario());
+		itemVariavel.setValorTotal(addItemVariavelForm.getValorUnitario() * addItemVariavelForm.getQde());
 
 		this.itemVariavelRepository.save(itemVariavel);
 
@@ -110,10 +111,15 @@ public class ItemController {
 
 	}
 
-	@DeleteMapping("/delItemVariavel/{itemVariavelId}")
+	@GetMapping("/delItemVariavel")
 	@Transactional
-	public ResponseEntity<?> delItemVariavel(@PathVariable Long itemVariavelId) {
-		this.itemVariavelRepository.deleteById(itemVariavelId);
+	public ResponseEntity<?> delItemVariavel(String pedidoIdForm, String ordemForm) {
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Integer ordem = Integer.parseInt(ordemForm);
+
+		ItemVariavel itemVariavel = this.itemVariavelRepository.getItemVariavel(pedidoId, ordem);
+
+		this.itemVariavelRepository.deleteById(itemVariavel.getId());
 
 		return ResponseEntity.ok().build();
 

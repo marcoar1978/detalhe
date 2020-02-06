@@ -2,30 +2,40 @@ package com.detalhe.form;
 
 public class AddItemVariavelForm {
 
-	private Long pedidoIdForm;
-	private Long tipoIdForm;
-	private String descricaoForm;
-	private Double valorForm;
-	private Integer qdeForm;
-
-	public Long getTipoIdForm() {
-		return tipoIdForm;
+	private Long pedidoId;
+	private Long tipoId;
+	private Integer ordem;
+	private String descricao;
+	private Integer qde;
+	private Double valorUnitario;
+	private Double valorTotal;
+	
+	public Long getPedidoId() {
+		return pedidoId;
+	}
+	
+	public Long getTipoId() {
+		return tipoId;
 	}
 
-	public Long getPedidoIdForm() {
-		return pedidoIdForm;
+	public Integer getOrdem() {
+		return ordem;
 	}
-
-	public String getDescricaoForm() {
-		return descricaoForm;
+	public String getDescricao() {
+		return descricao;
 	}
-
-	public Double getValorForm() {
-		return valorForm;
+	public Integer getQde() {
+		return qde;
 	}
-
-	public Integer getQdeForm() {
-		return qdeForm;
+	public Double getValorUnitario() {
+		return valorUnitario;
 	}
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+	
+	
+	
+	
 
 }

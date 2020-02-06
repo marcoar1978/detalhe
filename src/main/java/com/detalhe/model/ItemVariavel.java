@@ -17,6 +17,15 @@ import javax.persistence.ManyToOne;
 public class ItemVariavel extends Item {
 	
 	private String descricao;
+	private Integer ordem;
+
+	public Integer getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
 
 	public String getDescricao() {
 		return descricao;
