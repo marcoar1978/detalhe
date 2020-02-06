@@ -110,6 +110,7 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 
 	}
+	
 
 	@GetMapping("/delItemVariavel")
 	@Transactional
