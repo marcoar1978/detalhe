@@ -10,7 +10,7 @@ import com.detalhe.model.StatusEntrega;
 import com.detalhe.model.StatusPedido;
 
 public class Pedido2Dto {
-	
+
 	private Long id;
 	private LocalDate dataPedido;
 	private String clinica;
@@ -30,14 +30,14 @@ public class Pedido2Dto {
 	private String protetico;
 	private StatusPedido statusPedido;
 	private StatusEntrega statusEntrega;
-	private List<ItemPadraoDto> itensPadrao;
+	private List<ItemDto> itens;
 
 	public Pedido2Dto(Pedido pedido) {
 		this.id = pedido.getId();
 		this.dataPedido = pedido.getDataPedido();
 		this.clinica = pedido.getClinica().getNome();
 		this.clinicaId = pedido.getClinica().getId();
-		
+
 		this.dentista = pedido.getDentista().getNome();
 		this.nomePaciente = pedido.getNomePaciente();
 		this.prazo = pedido.getPrazo();
@@ -51,8 +51,16 @@ public class Pedido2Dto {
 		this.statusPedido = pedido.getStatusPedido();
 		this.statusEntrega = pedido.getStatusEntrega();
 		this.dataEntrega = pedido.getDataEntrega();
-		this.itensPadrao = ItemPadraoDto.converter(pedido.getItensPadrao());
+		this.itens = ItemDto.converter(pedido.getItens());
 
+	}
+
+	public List<ItemDto> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemDto> itens) {
+		this.itens = itens;
 	}
 
 	public Long getClinicaId() {
@@ -167,19 +175,6 @@ public class Pedido2Dto {
 		this.protetico = protetico;
 	}
 
-	public List<ItemPadraoDto> getItensPadrao() {
-		return itensPadrao;
-	}
-
-	public void setItensPadrao(List<ItemPadraoDto> itensPadrao) {
-		this.itensPadrao = itensPadrao;
-	}
-	
-	public static List<Pedido2Dto> converter(List<Pedido> pedidos) {
-		return pedidos.stream().map(Pedido2Dto::new).collect(Collectors.toList());
-
-	}
-
 	public LocalDate getDataEntrega() {
 		return dataEntrega;
 	}
@@ -203,8 +198,10 @@ public class Pedido2Dto {
 	public void setStatusEntrega(StatusEntrega statusEntrega) {
 		this.statusEntrega = statusEntrega;
 	}
-	
-	
 
+	public static List<Pedido2Dto> converter(List<Pedido> pedidos) {
+		return pedidos.stream().map(Pedido2Dto::new).collect(Collectors.toList());
+
+	}
 
 }

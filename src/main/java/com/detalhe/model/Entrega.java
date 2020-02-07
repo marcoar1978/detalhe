@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -26,17 +27,27 @@ public class Entrega {
 	private Long id;
 
 	private LocalDate dataEntrega;
-	private String entregador;
+	private String recebedor;
+
+	@ManyToOne
+	@JoinColumn(name = "clinica_id")
+	private Clinica clinica;
 
 	@ManyToOne
 	@JoinColumn(name = "fechamento_id")
 	private Fechamento fechamento;
+	
+	@Enumerated
+	private StatusFechamento statusFechamento = StatusFechamento.NAO;
+	
+	@OneToMany(mappedBy = "entrega", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Pedido> pedidos;
 
 	private String obs;
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario")
@@ -56,14 +67,6 @@ public class Entrega {
 
 	public void setDataEntrega(LocalDate dataEntrega) {
 		this.dataEntrega = dataEntrega;
-	}
-
-	public String getEntregador() {
-		return entregador;
-	}
-
-	public void setEntregador(String entregador) {
-		this.entregador = entregador;
 	}
 
 	public Fechamento getFechamento() {
@@ -105,5 +108,39 @@ public class Entrega {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+
+	public String getRecebedor() {
+		return recebedor;
+	}
+
+	public void setRecebedor(String recebedor) {
+		this.recebedor = recebedor;
+	}
+
+	public Clinica getClinica() {
+		return clinica;
+	}
+
+	public void setClinica(Clinica clinica) {
+		this.clinica = clinica;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+
+	public StatusFechamento getStatusFechamento() {
+		return statusFechamento;
+	}
+
+	public void setStatusFechamento(StatusFechamento statusFechamento) {
+		this.statusFechamento = statusFechamento;
+	}
+	
+	
 
 }

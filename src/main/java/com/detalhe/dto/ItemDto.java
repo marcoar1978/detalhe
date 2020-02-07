@@ -3,10 +3,9 @@ package com.detalhe.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.detalhe.model.Dentista;
-import com.detalhe.model.ItemPadrao;
+import com.detalhe.model.Item;
 
-public class ItemPadraoDto {
+public class ItemDto {
 	
 	private Long id;
 	private String descricao;
@@ -14,13 +13,13 @@ public class ItemPadraoDto {
 	private Double valorUnitario;
 	private Double valorTotal;
 	
-	public ItemPadraoDto(ItemPadrao itemPadrao) {
-		this.id = itemPadrao.getId();
-		this.descricao = itemPadrao.getProduto().getNome();
-		this.qde = itemPadrao.getQde();
-		this.valorUnitario = itemPadrao.getValorUnitario();
-		this.valorTotal = itemPadrao.getValorTotal();
-	}
+	public ItemDto(Item item) {
+		this.id = item.getId();
+		this.descricao = item.getDescricao();
+		this.qde = item.getQde();
+		this.valorUnitario = item.getValorUnitario();
+		this.valorTotal = item.getValorTotal();
+		}
 
 	public Long getId() {
 		return id;
@@ -62,9 +61,8 @@ public class ItemPadraoDto {
 		this.valorTotal = valorTotal;
 	}
 	
-	public static List<ItemPadraoDto> converter(List<ItemPadrao> itemPadrao) {
-		return itemPadrao.stream().map(ItemPadraoDto::new).collect(Collectors.toList());
+	public static List<ItemDto> converter(List<Item> itemPadrao) {
+		return itemPadrao.stream().map(ItemDto::new).collect(Collectors.toList());
 
 	}
-
 }

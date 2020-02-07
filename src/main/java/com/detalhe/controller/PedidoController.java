@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.detalhe.dto.AberturaPedidoDto;
 import com.detalhe.dto.DentistaDto;
-import com.detalhe.dto.ItemPadraoDto;
+import com.detalhe.dto.ItemDto;
 import com.detalhe.dto.PedidoDto;
 import com.detalhe.form.PedidoObsForm;
 import com.detalhe.model.Clinica;
 import com.detalhe.model.Dentista;
-import com.detalhe.model.ItemPadrao;
+import com.detalhe.model.Item;
 import com.detalhe.model.Pedido;
 import com.detalhe.model.Protetico;
 import com.detalhe.model.StatusPedido;
@@ -31,7 +31,7 @@ import com.detalhe.repository.UsuarioRepository;
 import com.detalhe.repository.ClinicaRepository;
 import com.detalhe.repository.PedidoRepository;
 import com.detalhe.repository.DentistaRepository;
-import com.detalhe.repository.ItemPadraoRepository;
+import com.detalhe.repository.ItemRepository;
 import com.detalhe.repository.ProteticoRepository;
 
 import com.detalhe.service.Acesso;
@@ -56,7 +56,7 @@ public class PedidoController {
 	ProteticoRepository proteticoRepository;
 	
 	@Autowired
-	ItemPadraoRepository itemPadraoRepository;
+	ItemRepository itemRepository;
 
 	@GetMapping
 	@RequestMapping("/abrirPedido")
@@ -179,10 +179,10 @@ public class PedidoController {
 		pedido.setDataPedido(hoje);
 		pedido.setDataEntregaPrevista(datePrevista);
 				
-		List<ItemPadrao> itensPadrao = this.itemPadraoRepository.listaItemPadraoPorPedido(pedidoId);
-		List<ItemPadraoDto> itemPadraoDto = ItemPadraoDto.converter(itensPadrao);
+		List<Item> itens = this.itemRepository.listaItemPorPedido(pedidoId);
+		List<ItemDto> itemDto = ItemDto.converter(itens);
 		
-		PedidoDto pedidoDto = new PedidoDto(pedido, itemPadraoDto );
+		PedidoDto pedidoDto = new PedidoDto(pedido, itemDto );
 		
 		return ResponseEntity.ok(pedidoDto);
 	}

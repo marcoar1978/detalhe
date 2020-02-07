@@ -27,12 +27,18 @@ public class Item {
 	@JoinColumn(name = "pedido_id")
 	private Pedido pedido;
 	
-	@ManyToOne
-	@JoinColumn(name = "tipo_id")
-	private Tipo tipo;
+	@Enumerated
+	private TipoProduto tipoProduto;
+	
+	private Integer produtoId;
+	private String descricao;
+	private Integer ordem;
 	
 	@Enumerated
 	private StatusEntrega statusEntrega;
+	
+	@Enumerated
+	private StatusPedido statusPedido;
 	
 	private LocalDate dataPedido;
 
@@ -80,14 +86,6 @@ public class Item {
 		this.valorTotal = valorTotal;
 	}
 
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
-	}
-
 	public StatusEntrega getStatusEntrega() {
 		return statusEntrega;
 	}
@@ -103,6 +101,47 @@ public class Item {
 	public void setDataPedido(LocalDate dataPedido) {
 		this.dataPedido = dataPedido;
 	}
-	
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Integer getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
+
+	public Integer getProdutoId() {
+		return produtoId;
+	}
+
+	public void setProdutoId(Integer produtoId) {
+		this.produtoId = produtoId;
+	}
+
+	public StatusPedido getStatusPedido() {
+		return statusPedido;
+	}
+
+	public void setStatusPedido(StatusPedido statusPedido) {
+		this.statusPedido = statusPedido;
+	}
+
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
+	}
+
+		
 
 }

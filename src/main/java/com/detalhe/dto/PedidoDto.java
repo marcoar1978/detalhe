@@ -24,9 +24,9 @@ public class PedidoDto {
 	private Double valorLiquido;
 	private String usuario;
 	private String protetico;
-	private List<ItemPadraoDto> itensPadrao;
+	private List<ItemDto> itens;
 
-	public PedidoDto(Pedido pedido, List<ItemPadraoDto> itensPadraoDto) {
+	public PedidoDto(Pedido pedido, List<ItemDto> itensDto) {
 		this.id = pedido.getId();
 		this.dataPedido = pedido.getDataPedido();
 		this.clinica = pedido.getClinica().getNome();
@@ -40,7 +40,7 @@ public class PedidoDto {
 		this.valorLiquido = pedido.getValorLiquido();
 		this.usuario = pedido.getUsuario().getNome();
 		this.protetico = pedido.getProtetico().getNome();
-		this.itensPadrao = itensPadraoDto;
+		this.itens = itensDto;
 
 	}
 
@@ -148,12 +148,14 @@ public class PedidoDto {
 		this.protetico = protetico;
 	}
 
-	public List<ItemPadraoDto> getItensPadrao() {
-		return itensPadrao;
+	public List<ItemDto> getItens() {
+		return itens;
 	}
 
-	public void setItensPadrao(List<ItemPadraoDto> itensPadrao) {
-		this.itensPadrao = itensPadrao;
+	public void setItens(List<ItemDto> itens) {
+		this.itens = itens;
 	}
+
+	
 
 }

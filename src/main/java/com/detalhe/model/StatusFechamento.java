@@ -1,8 +1,6 @@
 package com.detalhe.model;
 
-public enum StatusEntrega {
+public enum StatusFechamento {
 	SIM, NAO
 
 }
-
-

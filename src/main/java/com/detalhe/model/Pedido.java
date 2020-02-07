@@ -80,8 +80,8 @@ public class Pedido {
 	        cascade = CascadeType.ALL, 
 	        orphanRemoval = true
 	    )
-	private List<ItemPadrao> itensPadrao;
-
+	private List<Item> itens;
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -242,13 +242,15 @@ public class Pedido {
 		this.prazo = prazo;
 	}
 
-	public List<ItemPadrao> getItensPadrao() {
-		return itensPadrao;
+	public List<Item> getItens() {
+		return itens;
 	}
 
-	public void setItensPadrao(List<ItemPadrao> itensPadrao) {
-		this.itensPadrao = itensPadrao;
+	public void setItens(List<Item> itens) {
+		this.itens = itens;
 	}
+
+	
 
 	
 }

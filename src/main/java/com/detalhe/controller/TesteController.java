@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.detalhe.model.Produto;
 import com.detalhe.model.Tipo;
-import com.detalhe.model.ItemPadrao;
 import com.detalhe.model.Pedido;
-import com.detalhe.repository.ItemPadraoRepository;
 import com.detalhe.repository.ProdutoRepository;
 import com.detalhe.repository.TipoRepository;
 import com.detalhe.repository.PedidoRepository;
@@ -25,9 +23,6 @@ import com.detalhe.repository.PedidoRepository;
 public class TesteController {
 
 	@Autowired
-	ItemPadraoRepository itemPadraoRepository;
-
-	@Autowired
 	ProdutoRepository produtoRepository;
 	
 	@Autowired
@@ -36,23 +31,6 @@ public class TesteController {
 	@Autowired
 	PedidoRepository pedidoRepository; 
 
-	@GetMapping
-	@RequestMapping("/addItemPadrao")
-	@Transactional
-	public ResponseEntity<Produto> addItemPadrao() {
-
-		Produto produto = this.produtoRepository.findById(1l).get();
-
-		ItemPadrao itemPadrao = new ItemPadrao();
-		itemPadrao.setQde(2);
-		itemPadrao.setValorUnitario(10.0);
-		itemPadrao.setValorTotal(20.0);
-		itemPadrao.setProduto(produto);
-
-		this.itemPadraoRepository.save(itemPadrao);
-
-		return ResponseEntity.ok(produto);
-	}
 	
 	@GetMapping
 	@RequestMapping("/getTipos")
