@@ -15,5 +15,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	
 	@Query("SELECT i FROM Item i WHERE i.pedido.id = :pedidoId")
 	public List<Item> listaItemPorPedido(@Param("pedidoId") Long pedidoId);
+	
+	@Query("DELETE FROM Item i WHERE i.pedido.id = :pedidoId")
+	public List<Item> delItensPorProduto(@Param("pedidoId") Long pedidoId);
 
 }

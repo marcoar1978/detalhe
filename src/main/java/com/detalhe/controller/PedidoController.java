@@ -224,5 +224,18 @@ public class PedidoController {
 
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping
+	@RequestMapping("/delItensPorProduto")
+	@Transactional
+	public ResponseEntity<?> delItensPorProduto(String pedidoIdForm){
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		List<Item> itens = this.itemRepository.listaItemPorPedido(pedidoId);
+		for(Item item : itens) {
+			this.itemRepository.deleteById(item.getId());
+		}
+		
+		return ResponseEntity.ok().build();
+	}
 
 }
