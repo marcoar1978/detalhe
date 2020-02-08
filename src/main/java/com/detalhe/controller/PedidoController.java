@@ -19,6 +19,7 @@ import com.detalhe.dto.AberturaPedidoDto;
 import com.detalhe.dto.DentistaDto;
 import com.detalhe.dto.ItemDto;
 import com.detalhe.dto.PedidoDto;
+import com.detalhe.form.FinalizarPedidoForm;
 import com.detalhe.form.PedidoObsForm;
 import com.detalhe.model.Clinica;
 import com.detalhe.model.Dentista;
@@ -54,7 +55,7 @@ public class PedidoController {
 
 	@Autowired
 	ProteticoRepository proteticoRepository;
-	
+
 	@Autowired
 	ItemRepository itemRepository;
 
@@ -63,15 +64,15 @@ public class PedidoController {
 	@Transactional
 	public ResponseEntity<AberturaPedidoDto> abrirPedido() {
 		Pedido pedido = new Pedido();
-		//ZoneId zid = ZoneId.of("America/Sao_Paulo");
+		// ZoneId zid = ZoneId.of("America/Sao_Paulo");
 		LocalDate hoje = LocalDate.now();
-		//LocalDate datePrevista = hoje.plusDays(7);
-		//pedido.setDataCad(hoje);
-		//pedido.setDataPedido(hoje);
-		//pedido.setDataEntregaPrevista(datePrevista);
+		// LocalDate datePrevista = hoje.plusDays(7);
+		// pedido.setDataCad(hoje);
+		// pedido.setDataPedido(hoje);
+		// pedido.setDataEntregaPrevista(datePrevista);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);
-		
+
 		AberturaPedidoDto aberturaPedidoDto = new AberturaPedidoDto();
 		aberturaPedidoDto.setPedidoId(pedidoAberto.getId());
 		aberturaPedidoDto.setDataPedido(hoje);
@@ -133,67 +134,74 @@ public class PedidoController {
 
 		return ResponseEntity.ok(pedido);
 	}
-	
+
 	@GetMapping
 	@RequestMapping("/altDataEntregaPrevista")
-	@Transactional 
-	public ResponseEntity<?> altDataEntregaPrevista(String pedidoIdForm, String diasASomarForm){
+	@Transactional
+	public ResponseEntity<?> altDataEntregaPrevista(String pedidoIdForm, String diasASomarForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Integer diasASomar = Integer.parseInt(diasASomarForm);
 		LocalDate hoje = LocalDate.now();
 		LocalDate dataPrevista = hoje.plusDays(diasASomar);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setDataEntregaPrevista(dataPrevista);
-		
+
 		return ResponseEntity.ok().build();
 	}
-	
+
 	@GetMapping
 	@RequestMapping("/altDesconto")
-	@Transactional 
-	public ResponseEntity<?> altDesconto(String pedidoIdForm, String descontoForm){
+	@Transactional
+	public ResponseEntity<?> altDesconto(String pedidoIdForm, String descontoForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
-		Integer desconto =  Integer.parseInt(descontoForm);
+		Integer desconto = Integer.parseInt(descontoForm);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setDesconto(desconto);
-			
+
 		return ResponseEntity.ok().build();
 	}
-	
-	@GetMapping
+
+	@PostMapping
 	@RequestMapping("/conferirPedido")
 	@Transactional
-	public ResponseEntity<PedidoDto> conferirPedido(String pedidoIdForm, String valorTotalForm, String valorLiquidoForm, String prazoForm){
-		Long pedidoId = Long.parseLong(pedidoIdForm);
-		Double valorTotal = Double.parseDouble(valorTotalForm);
-		Double valorLiquido = Double.parseDouble(valorLiquidoForm);
-		Integer prazo = Integer.parseInt(prazoForm);
-		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
-		pedido.setValorTotal(valorTotal);
-		pedido.setValorLiquido(valorLiquido);
-		pedido.setPrazo(prazo);
-		ZoneId zid = ZoneId.of("America/Sao_Paulo");
-		LocalDate hoje = LocalDate.now(zid);
-		LocalDate datePrevista = hoje.plusDays(prazo);
-		pedido.setDataCad(hoje);
-		pedido.setDataPedido(hoje);
-		pedido.setDataEntregaPrevista(datePrevista);
-				
-		List<Item> itens = this.itemRepository.listaItemPorPedido(pedidoId);
+	public ResponseEntity<PedidoDto> conferirPedido(@RequestBody FinalizarPedidoForm form) {
+		Pedido pedido = this.pedidoRepository.getPedido(form.getPedidoId());
+		Clinica clinica = this.clinicaRepository.findById(form.getClinicaId()).get();
+		Dentista dentista = this.dentistaRepository.findById(form.getDentistaId()).get();
+		Protetico protetico = this.proteticoRepository.getById(form.getProteticoId()).get();
+		pedido.setClinica(clinica);
+		pedido.setDentista(dentista);
+		pedido.setProtetico(protetico);
+		pedido.setNomePaciente(form.getNomePaciente());
+		pedido.setProtetico(protetico);
+		pedido.setDesconto(form.getDesconto());
+		pedido.setDataCad(form.getDataCad());
+		pedido.setDataPedido(form.getDataPedido());
+		pedido.setObs(form.getObs());
+		pedido.setPrazo(form.getPrazo());
+		pedido.setDataEntregaPrevista(pedido.getDataPedido().plusDays(form.getPrazo()));
+		pedido.setDesconto(form.getDesconto());
+		pedido.setValorTotal(form.getValorTotal());
+		pedido.setValorLiquido(form.getValorLiquido());
+		pedido.setStatusPedido(StatusPedido.EM_PROCESSO);
+
+		List<Item> itens = this.itemRepository.listaItemPorPedido(form.getPedidoId());
 		List<ItemDto> itemDto = ItemDto.converter(itens);
-		
-		PedidoDto pedidoDto = new PedidoDto(pedido, itemDto );
-		
+
+		PedidoDto pedidoDto = new PedidoDto(pedido, itemDto);
+
 		return ResponseEntity.ok(pedidoDto);
-	}
+		}
 	
+	
+
 	@GetMapping
 	@RequestMapping("/altDataPedido")
 	@Transactional
-	public ResponseEntity<?> altDataPedido(String pedidoIdForm, String dataPedidoForm, String prazoForm){
+	public ResponseEntity<?> altDataPedido(String pedidoIdForm, String dataPedidoForm, String prazoForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Integer prazo = Integer.parseInt(prazoForm);
-		String[] dataArray =  dataPedidoForm.split("-");
+		String[] dataArray = dataPedidoForm.split("-");
 		Integer ano = Integer.parseInt(dataArray[0]);
 		Integer mes = Integer.parseInt(dataArray[1]);
 		Integer dia = Integer.parseInt(dataArray[2]);
@@ -202,22 +210,19 @@ public class PedidoController {
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setDataPedido(dataPedido);
 		pedido.setDataEntregaPrevista(dataEntregaPrevista);
-			
-		
+
 		return ResponseEntity.ok().build();
-	} 
-	
+	}
+
 	@GetMapping
 	@RequestMapping("/fecharPedido")
 	@Transactional
-	public ResponseEntity<?> fecharPedido(String pedidoIdForm){
+	public ResponseEntity<?> fecharPedido(String pedidoIdForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
 		pedido.setStatusPedido(StatusPedido.EM_PROCESSO);
-		
+
 		return ResponseEntity.ok().build();
 	}
-	
-	
-	
+
 }
