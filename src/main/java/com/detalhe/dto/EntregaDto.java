@@ -16,7 +16,7 @@ public class EntregaDto {
 	private StatusFechamento statusFechamento;
 	private Long clinicaId;
 	private String obs;
-	private List<Pedido2Dto> pedidos;
+	//private List<Pedido2Dto> pedidos;
 	
 	public EntregaDto(Entrega entrega) {
 		this.id = entrega.getId();
@@ -25,7 +25,7 @@ public class EntregaDto {
 		this.statusFechamento = entrega.getStatusFechamento();
 		this.clinicaId = entrega.getClinica().getId();
 		this.obs = entrega.getObs();
-		this.pedidos = Pedido2Dto.converter(entrega.getPedidos());
+		//this.pedidos = Pedido2Dto.converter(entrega.getPedidos());
 		
 	}
 
@@ -68,7 +68,7 @@ public class EntregaDto {
 	public void setObs(String obs) {
 		this.obs = obs;
 	}
-
+/*
 	public List<Pedido2Dto> getPedidos() {
 		return pedidos;
 	}
@@ -76,7 +76,7 @@ public class EntregaDto {
 	public void setPedidos(List<Pedido2Dto> pedidos) {
 		this.pedidos = pedidos;
 	}
-	
+	*/
 	public static List<EntregaDto> converter(List<Entrega> entregas) {
 		return entregas.stream().map(EntregaDto::new).collect(Collectors.toList());
 

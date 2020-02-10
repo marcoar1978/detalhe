@@ -29,6 +29,7 @@ public class Pedido {
 
 	private LocalDate dataPedido;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "entrega_id")
 	private Entrega entrega;

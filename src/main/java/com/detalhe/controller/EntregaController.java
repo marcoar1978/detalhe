@@ -27,6 +27,7 @@ import com.detalhe.form.EntregaForm;
 import com.detalhe.model.Clinica;
 import com.detalhe.model.Entrega;
 import com.detalhe.model.Pedido;
+import com.detalhe.model.StatusFechamento;
 import com.detalhe.model.StatusPedido;
 
 @RestController
@@ -78,7 +79,7 @@ public class EntregaController {
 		
 		for(int i = 0; i < entregaForm.getPedidosId().length; i++) {
 			Pedido pedido = this.pedidoRepository.findById(entregaForm.getPedidosId()[i]).get();
-			pedido.setStatusPedido(StatusPedido.ENTREGUE);
+			pedido.setStatusPedido(StatusPedido.CONCLUIDO);
 			pedido.setEntrega(entregaSave);
 			}
 		
@@ -90,10 +91,18 @@ public class EntregaController {
 	public ResponseEntity<EntregaDto> getEntregas(String entregaIdForm){
 		Long entregaId = Long.parseLong(entregaIdForm);
 		Entrega entrega = this.entregaRepository.findById(entregaId).get();
+		
 		EntregaDto entregaDto = new EntregaDto(entrega);
 		
 		return ResponseEntity.ok(entregaDto);
 		
+	}
+	
+	@GetMapping
+	@RequestMapping("/listaEntregas")
+	public ResponseEntity<?> listaEntregas(){
+		List<Entrega> entregas = this.entregaRepository.listaEntregaPorStatus(StatusFechamento.NAO);
+		return ResponseEntity.ok(EntregaDto.converter(entregas));
 	}
 
 }
