@@ -175,7 +175,7 @@ public class PedidoController {
 		pedido.setNomePaciente(form.getNomePaciente());
 		pedido.setProtetico(protetico);
 		pedido.setDesconto(form.getDesconto());
-		pedido.setDataCad(form.getDataCad());
+		pedido.setDataCad(LocalDate.now());
 		pedido.setDataPedido(form.getDataPedido());
 		pedido.setObs(form.getObs());
 		pedido.setPrazo(form.getPrazo());
