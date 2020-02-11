@@ -1,5 +1,7 @@
 package com.detalhe.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,13 @@ public class TesteController {
 		Produto produto = this.produtoRepository.findById(2L).get();
 		
 		return ResponseEntity.ok(produto);
-	} 
+	}
+	
+	@GetMapping
+	@RequestMapping("/testeData")
+	public ResponseEntity<LocalDateTime> testeData(){
+		LocalDateTime ldt = LocalDateTime.now();
+		return ResponseEntity.ok(ldt);
+	}
 
 }
