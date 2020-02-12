@@ -187,8 +187,10 @@ public class PedidoController {
 
 		List<Item> itens = this.itemRepository.listaItemPorPedido(form.getPedidoId());
 		List<ItemDto> itemDto = ItemDto.converter(itens);
+		
+		Pedido pedidoSave = this.pedidoRepository.getPedido(pedido.getId());
 
-		PedidoDto pedidoDto = new PedidoDto(pedido, itemDto);
+		PedidoDto pedidoDto = new PedidoDto(pedidoSave, itemDto);
 
 		return ResponseEntity.ok(pedidoDto);
 		}
