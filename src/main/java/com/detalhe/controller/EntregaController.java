@@ -24,6 +24,7 @@ import com.detalhe.dto.ClinicaDto;
 import com.detalhe.dto.EntregaDto;
 import com.detalhe.dto.Pedido2Dto;
 import com.detalhe.form.EntregaForm;
+import com.detalhe.form.RecebimentoDto;
 import com.detalhe.model.Clinica;
 import com.detalhe.model.Entrega;
 import com.detalhe.model.Pedido;
@@ -68,8 +69,7 @@ public class EntregaController {
 	@Transactional
 	public ResponseEntity<?> emiteRecebimento(@RequestBody EntregaForm entregaForm) {
 		Entrega entrega = new Entrega();
-		entrega.setDataCad(LocalDate.now());
-		entrega.setDataEntrega(entregaForm.getDataEntrega());
+		entrega.setDataCad(LocalDate.now().plusDays(1));
 		Clinica clinica = this.clinicaRepository.findById(entregaForm.getClinicaId()).get();
 		entrega.setClinica(clinica);
 		entrega.setObs(entregaForm.getObs());
@@ -83,6 +83,16 @@ public class EntregaController {
 			pedido.setEntrega(entregaSave);
 			}
 		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping
+	@RequestMapping("/registraRecebedor")
+	@Transactional
+	public ResponseEntity<?> registraRecebedor(@RequestBody RecebimentoDto recebimentoDto){
+		Entrega entrega = this.entregaRepository.findById(recebimentoDto.getEntregaId()).get();
+		entrega.setRecebedor(recebimentoDto.getRecebedor());
+		entrega.setDataEntrega(recebimentoDto.getDataEntrega().plusDays(1));
 		return ResponseEntity.ok().build();
 	}
 	

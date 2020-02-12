@@ -4,17 +4,11 @@ import java.time.LocalDate;
 
 public class EntregaForm {
 	
-	private LocalDate dataEntrega;
+	
 	private Long clinicaId;
 	private String obs;
 	private Long[] pedidosId;
 	
-	public LocalDate getDataEntrega() {
-		return dataEntrega;
-	}
-	public void setDataEntrega(LocalDate dataEntrega) {
-		this.dataEntrega = dataEntrega;
-	}
 	public Long getClinicaId() {
 		return clinicaId;
 	}
