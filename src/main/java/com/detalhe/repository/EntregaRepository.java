@@ -14,6 +14,7 @@ public interface EntregaRepository extends JpaRepository<Entrega, Long> {
 	
 	public Optional<Entrega> findById(Long id);
 	
+	
 	@Query("SELECT e FROM Entrega e WHERE e.statusFechamento = :statusFechamento")
 	public List<Entrega> listaEntregaPorStatus(@Param("statusFechamento") StatusFechamento statusFechamento);
 	
