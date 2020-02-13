@@ -11,6 +11,7 @@ import com.detalhe.model.StatusFechamento;
 public class EntregaDto {
 	
 	private Long id;
+	private LocalDate dataEmissao;
 	private LocalDate dataEntrega;
 	private String recebedor;
 	private StatusFechamento statusFechamento;
@@ -22,6 +23,7 @@ public class EntregaDto {
 	
 	public EntregaDto(Entrega entrega) {
 		this.id = entrega.getId();
+		this.dataEmissao = entrega.getDataCad();
 		this.dataEntrega = entrega.getDataEntrega();
 		this.recebedor = entrega.getRecebedor();
 		this.statusFechamento = entrega.getStatusFechamento();
@@ -86,6 +88,23 @@ public class EntregaDto {
 
 	public void setTotalEntrega(Double totalEntrega) {
 		this.totalEntrega = totalEntrega;
+	}
+
+	
+	public LocalDate getDataEmissao() {
+		return dataEmissao;
+	}
+
+	public void setDataEmissao(LocalDate dataEmissao) {
+		this.dataEmissao = dataEmissao;
+	}
+
+	public StatusFechamento getStatusFechamento() {
+		return statusFechamento;
+	}
+
+	public void setStatusFechamento(StatusFechamento statusFechamento) {
+		this.statusFechamento = statusFechamento;
 	}
 
 	public static List<EntregaDto> converter(List<Entrega> entregas) {
