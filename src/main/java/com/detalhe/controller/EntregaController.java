@@ -80,6 +80,9 @@ public class EntregaController {
 		
 		for(int i = 0; i < entregaForm.getPedidosId().length; i++) {
 			Pedido pedido = this.pedidoRepository.findById(entregaForm.getPedidosId()[i]).get();
+			pedido.setDataCad(pedido.getDataCad().plusDays(1));
+			pedido.setDataPedido(pedido.getDataPedido().plusDays(1));
+			pedido.setDataEntregaPrevista(pedido.getDataEntregaPrevista().plusDays(1));
 			pedido.setStatusPedido(StatusPedido.CONCLUIDO);
 			pedido.setEntrega(entregaSave);
 			}
