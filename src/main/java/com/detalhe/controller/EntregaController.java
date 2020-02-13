@@ -67,7 +67,7 @@ public class EntregaController {
 	@PostMapping
 	@RequestMapping("/emiteEntrega")
 	@Transactional
-	public ResponseEntity<?> emiteRecebimento(@RequestBody EntregaForm entregaForm) {
+	public ResponseEntity<Long> emiteRecebimento(@RequestBody EntregaForm entregaForm) {
 		Entrega entrega = new Entrega();
 		entrega.setDataCad(LocalDate.now().plusDays(1));
 		Clinica clinica = this.clinicaRepository.findById(entregaForm.getClinicaId()).get();
@@ -83,7 +83,7 @@ public class EntregaController {
 			pedido.setEntrega(entregaSave);
 			}
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(entregaSave.getId());
 	}
 	
 	@PostMapping
