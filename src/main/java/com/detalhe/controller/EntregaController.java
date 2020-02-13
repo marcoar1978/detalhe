@@ -73,6 +73,7 @@ public class EntregaController {
 		Clinica clinica = this.clinicaRepository.findById(entregaForm.getClinicaId()).get();
 		entrega.setClinica(clinica);
 		entrega.setObs(entregaForm.getObs());
+		entrega.setTotalEntrega(entregaForm.getTotalEntrega());
 		entrega.setUsuario(Acesso.getUsuario(usuarioRepository));
 		
 		Entrega entregaSave = this.entregaRepository.save(entrega);

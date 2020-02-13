@@ -16,7 +16,9 @@ public class EntregaDto {
 	private StatusFechamento statusFechamento;
 	private Long clinicaId;
 	private String obs;
+	private Double totalEntrega;
 	private List<Pedido2Dto> pedidos;
+	
 	
 	public EntregaDto(Entrega entrega) {
 		this.id = entrega.getId();
@@ -25,6 +27,7 @@ public class EntregaDto {
 		this.statusFechamento = entrega.getStatusFechamento();
 		this.clinicaId = entrega.getClinica().getId();
 		this.obs = entrega.getObs();
+		this.totalEntrega = entrega.getTotalEntrega();
 		this.pedidos = Pedido2Dto.converter(entrega.getPedidos());
 		
 	}
@@ -77,6 +80,14 @@ public class EntregaDto {
 		this.pedidos = pedidos;
 	}
 	
+	public Double getTotalEntrega() {
+		return totalEntrega;
+	}
+
+	public void setTotalEntrega(Double totalEntrega) {
+		this.totalEntrega = totalEntrega;
+	}
+
 	public static List<EntregaDto> converter(List<Entrega> entregas) {
 		return entregas.stream().map(EntregaDto::new).collect(Collectors.toList());
 

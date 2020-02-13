@@ -47,6 +47,8 @@ public class Entrega {
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
+	
+	private Double totalEntrega;
 
 	@JsonIgnore
 	@ManyToOne
@@ -139,6 +141,14 @@ public class Entrega {
 
 	public void setStatusFechamento(StatusFechamento statusFechamento) {
 		this.statusFechamento = statusFechamento;
+	}
+
+	public Double getTotalEntrega() {
+		return totalEntrega;
+	}
+
+	public void setTotalEntrega(Double totalEntrega) {
+		this.totalEntrega = totalEntrega;
 	}
 	
 	
