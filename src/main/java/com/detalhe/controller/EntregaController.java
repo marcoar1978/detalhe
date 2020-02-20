@@ -17,16 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.detalhe.repository.ClinicaRepository;
 import com.detalhe.repository.EntregaRepository;
+import com.detalhe.repository.FechamentoRepository;
 import com.detalhe.repository.PedidoRepository;
 import com.detalhe.repository.UsuarioRepository;
 import com.detalhe.service.Acesso;
 import com.detalhe.dto.ClinicaDto;
 import com.detalhe.dto.EntregaDto;
 import com.detalhe.dto.Pedido2Dto;
+import com.detalhe.form.AddFechamentoForm;
 import com.detalhe.form.EntregaForm;
 import com.detalhe.form.RecebimentoDto;
 import com.detalhe.model.Clinica;
 import com.detalhe.model.Entrega;
+import com.detalhe.model.Fechamento;
 import com.detalhe.model.Pedido;
 import com.detalhe.model.StatusFechamento;
 import com.detalhe.model.StatusPedido;
@@ -46,6 +49,9 @@ public class EntregaController {
 
 	@Autowired
 	EntregaRepository entregaRepository;
+	
+	@Autowired
+	FechamentoRepository fechamentoRepository;
 
 	@GetMapping
 	@RequestMapping("/listaClinicasPorStatusPedidoEmProcesso")
@@ -96,7 +102,7 @@ public class EntregaController {
 	public ResponseEntity<?> registraRecebedor(@RequestBody RecebimentoDto recebimentoDto){
 		Entrega entrega = this.entregaRepository.findById(recebimentoDto.getEntregaId()).get();
 		entrega.setRecebedor(recebimentoDto.getRecebedor());
-		entrega.setDataEntrega(recebimentoDto.getDataEntrega().plusDays(1));
+		entrega.setDataEntrega(recebimentoDto.getDataEntrega());
 		return ResponseEntity.ok().build();
 	}
 	
@@ -118,5 +124,31 @@ public class EntregaController {
 		List<Entrega> entregas = this.entregaRepository.listaEntregaPorStatus(StatusFechamento.NAO);
 		return ResponseEntity.ok(EntregaDto.converter(entregas));
 	}
+	
+	@PostMapping
+	@RequestMapping("/registrarFechamento")
+	@Transactional
+	public ResponseEntity<Long> registrarFechamento(@RequestBody AddFechamentoForm addFechamentoForm){
+		Clinica clinica = this.clinicaRepository.findById(addFechamentoForm.getClinicaId()).get();		
+		Fechamento fechamento = new Fechamento();
+		fechamento.setClinica(clinica);
+		fechamento.setDataCad(addFechamentoForm.getDataFechamento());
+		fechamento.setDataFechamento(addFechamentoForm.getDataFechamento());
+		fechamento.setValorTotal(addFechamentoForm.getValorTotal());
+		fechamento.setValorPgto(addFechamentoForm.getValorPgto());
+		fechamento.setObs(addFechamentoForm.getObs());
+		fechamento.setUsuario(Acesso.getUsuario(usuarioRepository));
+		
+		Fechamento fechamentoSave = this.fechamentoRepository.save(fechamento);
+		
+		for(int i = 0; i < addFechamentoForm.getEntregasId().length; i++) {
+			Entrega entrega = this.entregaRepository.findById(addFechamentoForm.getEntregasId()[i]).get();
+			entrega.setFechamento(fechamentoSave);
+			entrega.setStatusFechamento(StatusFechamento.SIM);
+		}
+		
+		return ResponseEntity.ok(fechamentoSave.getId());
+	}
+	
 
 }
