@@ -1,6 +1,7 @@
 package com.detalhe.controller;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.detalhe.dto.FechamentoDto;
 import com.detalhe.model.Fechamento;
+import com.detalhe.model.Pgto;
+import com.detalhe.form.AddPgtoForm;
 import com.detalhe.repository.FechamentoRepository;
+import com.detalhe.repository.PgtoRepository;
+import com.detalhe.repository.UsuarioRepository;
+import com.detalhe.service.Acesso;
 
 @RestController
 @RequestMapping("/fechamento")
 public class FechamentoController {
+	
+	@Autowired
+	UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	PgtoRepository pgtoRepository;
 
 	@Autowired
 	FechamentoRepository fechamentoRepository;
@@ -31,6 +43,27 @@ public class FechamentoController {
 		List<FechamentoDto> fechamentosDto = FechamentoDto.converter(fechamentos);
 		return ResponseEntity.ok(fechamentosDto);
 
+	}
+	
+	@PostMapping
+	@RequestMapping("/addPgto")
+	@Transactional
+	public ResponseEntity<?> addPgto(@RequestBody AddPgtoForm addPgtoForm){
+		Fechamento fechamento = this.fechamentoRepository.findById(addPgtoForm.getFechamentoId()).get();
+		Double valorPgtoAtual = addPgtoForm.getValor() + fechamento.getValorPgto();
+		fechamento.setValorPgto(valorPgtoAtual);
+		
+		Pgto pgto = new Pgto();
+		pgto.setFechamento(fechamento);
+		pgto.setDataCad(LocalDate.now());
+		pgto.setDataPagamento(addPgtoForm.getDataPagamento());
+		pgto.setValor(addPgtoForm.getValor());
+		pgto.setObs(addPgtoForm.getObs());
+		pgto.setUsuario(Acesso.getUsuario(usuarioRepository));
+		
+		this.pgtoRepository.save(pgto);
+			
+		return ResponseEntity.ok().build();
 	}
 
 }

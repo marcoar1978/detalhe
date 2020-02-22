@@ -12,12 +12,15 @@ public class PgtoDto {
 	private Long id;
 	private LocalDate dataPagamento;
 	private Double valor;
+	private String obs;
 	private String usuario;
+	
 
 	public PgtoDto(Pgto pgto) {
 		this.id = pgto.getId();
 		this.dataPagamento = pgto.getDataPagamento();
 		this.valor = pgto.getValor();
+		this.obs = pgto.getObs();
 		this.usuario = pgto.getUsuario().getNome();
 	}
 
@@ -51,6 +54,15 @@ public class PgtoDto {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
+	}
+	
+
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 	public static List<PgtoDto> converter(List<Pgto> pgtos) {

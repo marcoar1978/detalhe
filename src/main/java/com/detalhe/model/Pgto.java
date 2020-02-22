@@ -27,6 +27,7 @@ public class Pgto {
 	
 	private LocalDate dataPagamento;
 	private Double valor;
+	private String obs;
 	
 	@ManyToOne
 	@JoinColumn(name = "fechamento_id")
@@ -94,6 +95,14 @@ public class Pgto {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 	
 	
