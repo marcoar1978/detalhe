@@ -55,8 +55,8 @@ public class FechamentoController {
 		
 		Pgto pgto = new Pgto();
 		pgto.setFechamento(fechamento);
-		pgto.setDataCad(LocalDate.now());
-		pgto.setDataPagamento(addPgtoForm.getDataPagamento());
+		pgto.setDataCad(LocalDate.now().plusDays(1));
+		pgto.setDataPagamento(addPgtoForm.getDataPagamento().plusDays(1));
 		pgto.setValor(addPgtoForm.getValor());
 		pgto.setObs(addPgtoForm.getObs());
 		pgto.setUsuario(Acesso.getUsuario(usuarioRepository));

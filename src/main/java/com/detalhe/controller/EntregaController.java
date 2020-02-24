@@ -102,7 +102,7 @@ public class EntregaController {
 	public ResponseEntity<?> registraRecebedor(@RequestBody RecebimentoDto recebimentoDto){
 		Entrega entrega = this.entregaRepository.findById(recebimentoDto.getEntregaId()).get();
 		entrega.setRecebedor(recebimentoDto.getRecebedor());
-		entrega.setDataEntrega(recebimentoDto.getDataEntrega());
+		entrega.setDataEntrega(recebimentoDto.getDataEntrega().plusDays(1));
 		return ResponseEntity.ok().build();
 	}
 	
@@ -132,8 +132,8 @@ public class EntregaController {
 		Clinica clinica = this.clinicaRepository.findById(addFechamentoForm.getClinicaId()).get();		
 		Fechamento fechamento = new Fechamento();
 		fechamento.setClinica(clinica);
-		fechamento.setDataCad(addFechamentoForm.getDataFechamento());
-		fechamento.setDataFechamento(addFechamentoForm.getDataFechamento());
+		fechamento.setDataCad(addFechamentoForm.getDataFechamento().plusDays(1));
+		fechamento.setDataFechamento(addFechamentoForm.getDataFechamento().plusDays(1));
 		fechamento.setValorTotal(addFechamentoForm.getValorTotal());
 		fechamento.setValorPgto(addFechamentoForm.getValorPgto());
 		fechamento.setObs(addFechamentoForm.getObs());
@@ -144,6 +144,8 @@ public class EntregaController {
 		for(int i = 0; i < addFechamentoForm.getEntregasId().length; i++) {
 			Entrega entrega = this.entregaRepository.findById(addFechamentoForm.getEntregasId()[i]).get();
 			entrega.setFechamento(fechamentoSave);
+			entrega.setDataCad(entrega.getDataCad().plusDays(1));
+			entrega.setDataEntrega(entrega.getDataEntrega().plusDays(1));
 			entrega.setStatusFechamento(StatusFechamento.SIM);
 		}
 		
