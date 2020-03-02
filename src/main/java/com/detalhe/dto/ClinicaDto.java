@@ -10,10 +10,13 @@ public class ClinicaDto {
 
 	private Long id;
 	private String nomeSimp;
+	private Long listaId;
 
 	public ClinicaDto(Clinica clinica) {
 		this.id = clinica.getId();
 		this.nomeSimp = clinica.getNomeSimp();
+		this.listaId = clinica.getListaPrecos().getId();
+		
 	}
 
 	public Long getId() {
@@ -22,6 +25,22 @@ public class ClinicaDto {
 
 	public String getNomeSimp() {
 		return nomeSimp;
+	}
+	
+	public Long getListaId() {
+		return listaId;
+	}
+
+	public void setListaId(Long listaId) {
+		this.listaId = listaId;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setNomeSimp(String nomeSimp) {
+		this.nomeSimp = nomeSimp;
 	}
 
 	public static List<ClinicaDto> converter(List<Clinica> clinicas) {

@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.detalhe.dto.DetPrecosDto;
 import com.detalhe.dto.LigaClinicaProdutoDto;
 import com.detalhe.dto.ProdutoDto;
+import com.detalhe.model.DetPrecos;
 import com.detalhe.model.LigaClinicaProduto;
 import com.detalhe.model.Produto;
+import com.detalhe.repository.DetPrecosRepository;
 import com.detalhe.repository.LigaProdutoClinicaRepository;
 import com.detalhe.repository.ProdutoRepository;
 
@@ -29,6 +32,9 @@ public class ProdutoController {
 	
 	@Autowired 
 	LigaProdutoClinicaRepository  ligaProdutoClinicaRepository;
+	
+	@Autowired
+	DetPrecosRepository detPrecosRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<ProdutoDto>> lista(){
@@ -53,6 +59,15 @@ public class ProdutoController {
 		return ResponseEntity.ok(LigaClinicaProdutoDto.converter(lcp));
 		
 	}
+	
+	@GetMapping("/detPrecos")
+	public ResponseEntity<List<DetPrecosDto>> detPrecos(){
+		List<DetPrecos> detPrecos = this.detPrecosRepository.detPrecos();
+		
+		return ResponseEntity.ok(DetPrecosDto.converter(detPrecos));
+	}
+	
+	
 	
 	
 	

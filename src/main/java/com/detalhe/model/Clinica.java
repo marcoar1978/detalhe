@@ -34,18 +34,17 @@ public class Clinica {
 	private String email;
 	private Integer desconto;
 	private String obs;
-	
-	
-	@OneToMany(
-	        mappedBy = "clinica", 
-	        cascade = CascadeType.ALL, 
-	        orphanRemoval = true
-	    )
+
+	@OneToMany(mappedBy = "clinica", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Pedido> pedidos;
 
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "listaPrecos")
+	private ListaPrecos listaPrecos;
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario")
@@ -169,6 +168,14 @@ public class Clinica {
 
 	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
+	}
+
+	public ListaPrecos getListaPrecos() {
+		return listaPrecos;
+	}
+
+	public void setListaPrecos(ListaPrecos listaPrecos) {
+		this.listaPrecos = listaPrecos;
 	}
 
 }
