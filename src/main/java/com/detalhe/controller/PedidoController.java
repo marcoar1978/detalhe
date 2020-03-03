@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.detalhe.dto.AberturaPedidoDto;
 import com.detalhe.dto.DentistaDto;
 import com.detalhe.dto.ItemDto;
+import com.detalhe.dto.Pedido2Dto;
 import com.detalhe.dto.PedidoDto;
 import com.detalhe.form.FinalizarPedidoForm;
 import com.detalhe.form.PedidoObsForm;
@@ -64,12 +66,7 @@ public class PedidoController {
 	@Transactional
 	public ResponseEntity<AberturaPedidoDto> abrirPedido() {
 		Pedido pedido = new Pedido();
-		// ZoneId zid = ZoneId.of("America/Sao_Paulo");
 		LocalDate hoje = LocalDate.now();
-		// LocalDate datePrevista = hoje.plusDays(7);
-		// pedido.setDataCad(hoje);
-		// pedido.setDataPedido(hoje);
-		// pedido.setDataEntregaPrevista(datePrevista);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);
 
@@ -187,15 +184,13 @@ public class PedidoController {
 
 		List<Item> itens = this.itemRepository.listaItemPorPedido(form.getPedidoId());
 		List<ItemDto> itemDto = ItemDto.converter(itens);
-		
+
 		Pedido pedidoSave = this.pedidoRepository.getPedido(pedido.getId());
 
 		PedidoDto pedidoDto = new PedidoDto(pedidoSave, itemDto);
 
 		return ResponseEntity.ok(pedidoDto);
-		}
-	
-	
+	}
 
 	@GetMapping
 	@RequestMapping("/altDataPedido")
@@ -226,18 +221,67 @@ public class PedidoController {
 
 		return ResponseEntity.ok().build();
 	}
-	
+
 	@GetMapping
 	@RequestMapping("/delItensPorProduto")
 	@Transactional
-	public ResponseEntity<?> delItensPorProduto(String pedidoIdForm){
+	public ResponseEntity<?> delItensPorProduto(String pedidoIdForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		List<Item> itens = this.itemRepository.listaItemPorPedido(pedidoId);
-		for(Item item : itens) {
+		for (Item item : itens) {
 			this.itemRepository.deleteById(item.getId());
 		}
-		
+
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping
+	@RequestMapping("/consultaPorId/{pedidoIdForm}")
+	public ResponseEntity<Pedido2Dto> consultaPorId(@PathVariable String pedidoIdForm) {
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		Pedido2Dto pedido2Dto = new Pedido2Dto(pedido);
+		return ResponseEntity.ok(pedido2Dto);
+	}
+
+	@GetMapping
+	@RequestMapping("/consultaPorPaciente")
+	public ResponseEntity<List<Pedido2Dto>> consultaPorPaciente(String nomePaciente) {
+		List<Pedido> pedidos = this.pedidoRepository.consultaPorPaciente(nomePaciente);
+		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
+	}
+
+	@GetMapping
+	@RequestMapping("/consultaPorClinica")
+	public ResponseEntity<List<Pedido2Dto>> consultaPorClinica(String clinicaIdForm, String anoForm, String mesForm) {
+
+		Integer ano = Integer.parseInt(anoForm);
+		Integer mes = Integer.parseInt(mesForm);
+		LocalDate dataInicio = LocalDate.of(ano, mes, 1);
+		LocalDate dataFim = this.getDataFim(ano, mes);
+		List<Pedido> pedidos = null;
+		if (clinicaIdForm.equals("todos")) {
+			pedidos = this.pedidoRepository.consultaPorMes(dataInicio, dataFim);
+		} else {
+			Long clinicaId = Long.parseLong(clinicaIdForm);
+			Clinica clinica = this.clinicaRepository.findById(clinicaId).get();
+			pedidos = this.pedidoRepository.consultaPorClinica(clinica, dataInicio, dataFim);
+		}
+
+		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
+	}
+
+	private LocalDate getDataFim(Integer ano, Integer mes) {
+		Integer dias = 28;
+		if ((mes == 1) || (mes == 3) || (mes == 5) || (mes == 7) || (mes == 8) || (mes == 10) || (mes == 12)) {
+			dias = 31;
+		} else if ((mes == 4) || (mes == 6) || (mes == 9) || (mes == 11)) {
+			dias = 30;
+		} else if (mes == 2) {
+			dias = 28;
+		}
+		LocalDate dataFim = LocalDate.of(ano, mes, dias);
+		return dataFim;
 	}
 
 }

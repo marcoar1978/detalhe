@@ -31,6 +31,7 @@ public class Pedido2Dto {
 	private StatusPedido statusPedido;
 	private StatusEntrega statusEntrega;
 	private List<ItemDto> itens;
+	private Entrega2Dto entrega;
 
 	public Pedido2Dto(Pedido pedido) {
 		this.id = pedido.getId();
@@ -52,6 +53,7 @@ public class Pedido2Dto {
 		this.statusEntrega = pedido.getStatusEntrega();
 		this.dataEntrega = pedido.getDataEntrega();
 		this.itens = ItemDto.converter(pedido.getItens());
+		this.entrega = (pedido.getEntrega() == null)? null : new Entrega2Dto(pedido.getEntrega());
 
 	}
 
@@ -197,6 +199,14 @@ public class Pedido2Dto {
 
 	public void setStatusEntrega(StatusEntrega statusEntrega) {
 		this.statusEntrega = statusEntrega;
+	}
+
+	public Entrega2Dto getEntrega() {
+		return entrega;
+	}
+
+	public void setEntrega(Entrega2Dto entrega) {
+		this.entrega = entrega;
 	}
 
 	public static List<Pedido2Dto> converter(List<Pedido> pedidos) {

@@ -9,8 +9,8 @@ import com.detalhe.model.Fechamento;
 import com.detalhe.model.Pedido;
 import com.detalhe.model.StatusFechamento;
 
-public class EntregaDto {
-	
+public class Entrega2Dto {
+
 	private Long id;
 	private LocalDate dataEmissao;
 	private LocalDate dataEntrega;
@@ -19,11 +19,9 @@ public class EntregaDto {
 	private Long clinicaId;
 	private String obs;
 	private Double totalEntrega;
-	private List<Pedido2Dto> pedidos;
-	
-	
-	
-	public EntregaDto(Entrega entrega) {
+	private Fechamento2Dto fechamento;
+
+	public Entrega2Dto(Entrega entrega) {
 		this.id = entrega.getId();
 		this.dataEmissao = entrega.getDataCad();
 		this.dataEntrega = entrega.getDataEntrega();
@@ -32,8 +30,8 @@ public class EntregaDto {
 		this.clinicaId = entrega.getClinica().getId();
 		this.obs = entrega.getObs();
 		this.totalEntrega = entrega.getTotalEntrega();
-		this.pedidos = Pedido2Dto.converter(entrega.getPedidos());
-		
+		this.fechamento = (entrega.getFechamento() == null)? null : new Fechamento2Dto(entrega.getFechamento());
+
 	}
 
 	public Long getId() {
@@ -76,14 +74,6 @@ public class EntregaDto {
 		this.obs = obs;
 	}
 
-	public List<Pedido2Dto> getPedidos() {
-		return pedidos;
-	}
-
-	public void setPedidos(List<Pedido2Dto> pedidos) {
-		this.pedidos = pedidos;
-	}
-	
 	public Double getTotalEntrega() {
 		return totalEntrega;
 	}
@@ -92,7 +82,6 @@ public class EntregaDto {
 		this.totalEntrega = totalEntrega;
 	}
 
-	
 	public LocalDate getDataEmissao() {
 		return dataEmissao;
 	}
@@ -108,12 +97,18 @@ public class EntregaDto {
 	public void setStatusFechamento(StatusFechamento statusFechamento) {
 		this.statusFechamento = statusFechamento;
 	}
+	
+	public Fechamento2Dto getFechamento() {
+		return fechamento;
+	}
+
+	public void setFechamento(Fechamento2Dto fechamento) {
+		this.fechamento = fechamento;
+	}
 
 	public static List<EntregaDto> converter(List<Entrega> entregas) {
 		return entregas.stream().map(EntregaDto::new).collect(Collectors.toList());
 
 	}
-	
-	
 
 }
