@@ -240,8 +240,13 @@ public class PedidoController {
 	public ResponseEntity<Pedido2Dto> consultaPorId(@PathVariable String pedidoIdForm) {
 		Long pedidoId = Long.parseLong(pedidoIdForm);
 		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
-		Pedido2Dto pedido2Dto = new Pedido2Dto(pedido);
-		return ResponseEntity.ok(pedido2Dto);
+		if (pedido == null) {
+			return ResponseEntity.badRequest().build();
+		} else {
+			Pedido2Dto pedido2Dto = new Pedido2Dto(pedido);
+			return ResponseEntity.ok(pedido2Dto);
+		}
+
 	}
 
 	@GetMapping

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,5 +66,15 @@ public class FechamentoController {
 			
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/{fechamentoIdForm}")
+	public ResponseEntity<FechamentoDto> getFechamento(@PathVariable String fechamentoIdForm){
+		Long fechamentoId = Long.valueOf(fechamentoIdForm);
+		Fechamento fechamento = this.fechamentoRepository.findById(fechamentoId).get();
+		FechamentoDto fechamentoDto = new FechamentoDto(fechamento);
+		
+		return ResponseEntity.ok(fechamentoDto);
+	}
+	
 
 }
