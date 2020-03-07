@@ -22,12 +22,12 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	@Query("SELECT p FROM Pedido p WHERE p.statusPedido = :status")
 	public List<Pedido> listaPedidosPorStatus(@Param("status") StatusPedido status);
 	
-	@Query("SELECT p FROM Pedido p WHERE p.nomePaciente LIKE %:nomePaciente%")
-	public List<Pedido> consultaPorPaciente(@Param("nomePaciente") String nomePaciente);
+	@Query("SELECT p FROM Pedido p WHERE p.nomePaciente LIKE %:nomePaciente% AND p.statusPedido NOT IN (:statusPedidoAberto, :statusPedidoCancelado)")
+	public List<Pedido> consultaPorPaciente(@Param("nomePaciente") String nomePaciente, @Param("statusPedidoAberto") StatusPedido statusAberto, @Param("statusPedidoCancelado") StatusPedido statusFechado);
 	
-	@Query("SELECT p FROM Pedido p WHERE p.clinica = :clinica and p.dataPedido between :dataInicio and :dataFim")
-	public List<Pedido> consultaPorClinica(@Param("clinica") Clinica clinica, @Param("dataInicio") LocalDate dataInicio, @Param("dataFim")LocalDate dataFim);
+	@Query("SELECT p FROM Pedido p WHERE p.clinica = :clinica and p.dataPedido between :dataInicio and :dataFim  AND p.statusPedido NOT IN (:statusPedidoAberto, :statusPedidoCancelado)")
+	public List<Pedido> consultaPorClinica(@Param("clinica") Clinica clinica, @Param("dataInicio") LocalDate dataInicio, @Param("dataFim")LocalDate dataFim,  @Param("statusPedidoAberto") StatusPedido statusAberto, @Param("statusPedidoCancelado") StatusPedido statusFechado);
 	
-	@Query("SELECT p FROM Pedido p WHERE p.dataPedido between :dataInicio and :dataFim")
-	public List<Pedido> consultaPorMes(@Param("dataInicio") LocalDate dataInicio, @Param("dataFim")LocalDate dataFim);
+	@Query("SELECT p FROM Pedido p WHERE p.dataPedido between :dataInicio and :dataFim  AND p.statusPedido NOT IN (:statusPedidoAberto, :statusPedidoCancelado)")
+	public List<Pedido> consultaPorMes(@Param("dataInicio") LocalDate dataInicio, @Param("dataFim")LocalDate dataFim, @Param("statusPedidoAberto") StatusPedido statusAberto, @Param("statusPedidoCancelado") StatusPedido statusFechado);
 	}

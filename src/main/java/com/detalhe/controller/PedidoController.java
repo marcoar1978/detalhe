@@ -36,6 +36,7 @@ import com.detalhe.repository.PedidoRepository;
 import com.detalhe.repository.DentistaRepository;
 import com.detalhe.repository.ItemRepository;
 import com.detalhe.repository.ProteticoRepository;
+import com.detalhe.service.Data;
 
 import com.detalhe.service.Acesso;
 
@@ -252,7 +253,7 @@ public class PedidoController {
 	@GetMapping
 	@RequestMapping("/consultaPorPaciente")
 	public ResponseEntity<List<Pedido2Dto>> consultaPorPaciente(String nomePaciente) {
-		List<Pedido> pedidos = this.pedidoRepository.consultaPorPaciente(nomePaciente);
+		List<Pedido> pedidos = this.pedidoRepository.consultaPorPaciente(nomePaciente, StatusPedido.EM_ABERTO, StatusPedido.CANCELADO);
 		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
 	}
 
@@ -263,30 +264,17 @@ public class PedidoController {
 		Integer ano = Integer.parseInt(anoForm);
 		Integer mes = Integer.parseInt(mesForm);
 		LocalDate dataInicio = LocalDate.of(ano, mes, 1);
-		LocalDate dataFim = this.getDataFim(ano, mes);
+		LocalDate dataFim = Data.getDataFim(ano, mes);
 		List<Pedido> pedidos = null;
 		if (clinicaIdForm.equals("todos")) {
-			pedidos = this.pedidoRepository.consultaPorMes(dataInicio, dataFim);
+			pedidos = this.pedidoRepository.consultaPorMes(dataInicio, dataFim, StatusPedido.EM_ABERTO, StatusPedido.CANCELADO);
 		} else {
 			Long clinicaId = Long.parseLong(clinicaIdForm);
 			Clinica clinica = this.clinicaRepository.findById(clinicaId).get();
-			pedidos = this.pedidoRepository.consultaPorClinica(clinica, dataInicio, dataFim);
+			pedidos = this.pedidoRepository.consultaPorClinica(clinica, dataInicio, dataFim, StatusPedido.EM_ABERTO, StatusPedido.CANCELADO);
 		}
 
 		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
-	}
-
-	private LocalDate getDataFim(Integer ano, Integer mes) {
-		Integer dias = 28;
-		if ((mes == 1) || (mes == 3) || (mes == 5) || (mes == 7) || (mes == 8) || (mes == 10) || (mes == 12)) {
-			dias = 31;
-		} else if ((mes == 4) || (mes == 6) || (mes == 9) || (mes == 11)) {
-			dias = 30;
-		} else if (mes == 2) {
-			dias = 28;
-		}
-		LocalDate dataFim = LocalDate.of(ano, mes, dias);
-		return dataFim;
 	}
 
 }

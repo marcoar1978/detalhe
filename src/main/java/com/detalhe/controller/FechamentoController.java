@@ -1,6 +1,7 @@
 package com.detalhe.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.detalhe.dto.FechamentoDto;
+import com.detalhe.model.Clinica;
 import com.detalhe.model.Fechamento;
 import com.detalhe.model.Pgto;
 import com.detalhe.form.AddPgtoForm;
+import com.detalhe.repository.ClinicaRepository;
 import com.detalhe.repository.FechamentoRepository;
 import com.detalhe.repository.PgtoRepository;
 import com.detalhe.repository.UsuarioRepository;
 import com.detalhe.service.Acesso;
+import com.detalhe.service.Data;
 
 @RestController
 @RequestMapping("/fechamento")
@@ -30,6 +34,9 @@ public class FechamentoController {
 	
 	@Autowired
 	UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	ClinicaRepository clinicaRepository;
 	
 	@Autowired
 	PgtoRepository pgtoRepository;
@@ -70,10 +77,36 @@ public class FechamentoController {
 	@GetMapping("/{fechamentoIdForm}")
 	public ResponseEntity<FechamentoDto> getFechamento(@PathVariable String fechamentoIdForm){
 		Long fechamentoId = Long.valueOf(fechamentoIdForm);
-		Fechamento fechamento = this.fechamentoRepository.findById(fechamentoId).get();
-		FechamentoDto fechamentoDto = new FechamentoDto(fechamento);
+		Optional<Fechamento> fechamentoOptional = this.fechamentoRepository.findById(fechamentoId);
+		if(fechamentoOptional.isPresent()) {
+			FechamentoDto fechamentoDto = new FechamentoDto(fechamentoOptional.get());
+			return ResponseEntity.ok(fechamentoDto);
+		}
+		else {
+			return ResponseEntity.badRequest().build();
+		}
 		
-		return ResponseEntity.ok(fechamentoDto);
+	}
+	
+	@GetMapping
+	@RequestMapping("/consultaPorClinica")
+	public ResponseEntity<List<FechamentoDto>> consultaPorClinica(String clinicaIdForm, String anoForm,
+			String mesForm){
+		Integer ano = Integer.parseInt(anoForm);
+		Integer mes = Integer.parseInt(mesForm);
+		LocalDate dataInicio = LocalDate.of(ano, mes, 1);
+		LocalDate dataFim = Data.getDataFim(ano, mes);
+		List<Fechamento> fechamentos = null;
+		if(clinicaIdForm.equals("todos")) {
+			fechamentos = this.fechamentoRepository.consultaPorMes(dataInicio, dataFim);
+		}
+		else {
+			Long clinicaId = Long.parseLong(clinicaIdForm);
+			Clinica clinica = this.clinicaRepository.findById(clinicaId).get();
+			fechamentos = this.fechamentoRepository.consultaPorClinica(clinica, dataInicio, dataFim);
+		}
+		
+		return ResponseEntity.ok(FechamentoDto.converter(fechamentos));
 	}
 	
 
