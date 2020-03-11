@@ -9,7 +9,7 @@ import com.detalhe.model.DetPrecos;
 
 public interface DetPrecosRepository extends JpaRepository<DetPrecos, Long> {
 	
-	@Query("SELECT dp FROM DetPrecos dp")
+	@Query("SELECT dp FROM DetPrecos dp ORDER BY dp.produto.nome")
 	public List<DetPrecos> detPrecos();
 
 }
