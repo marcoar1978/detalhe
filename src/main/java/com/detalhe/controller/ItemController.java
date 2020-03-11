@@ -50,22 +50,19 @@ public class ItemController {
 	@Autowired
 	TipoRepository tipoRepository;
 
-	
-
 	@PostMapping
 	@RequestMapping("/addItem")
 	@Transactional
 	public ResponseEntity<?> addItem(@RequestBody AddItemForm addItemForm) {
 		Pedido pedido = this.pedidoRepository.getPedido(addItemForm.getPedidoId());
-		
+
 		Item item = new Item();
 		item.setPedido(pedido);
 		item.setDescricao(addItemForm.getDescricao());
 		item.setOrdem(addItemForm.getOrdem());
-		if(addItemForm.getTipoProduto().equals("padrao")) {
+		if (addItemForm.getTipoProduto().equals("padrao")) {
 			item.setTipoProduto(TipoProduto.PADRAO);
-		}
-		else {
+		} else {
 			item.setTipoProduto(TipoProduto.VARIAVEL);
 		}
 		item.setProdutoId(addItemForm.getProdutoId());
@@ -81,7 +78,6 @@ public class ItemController {
 		return ResponseEntity.ok().build();
 
 	}
-	
 
 	@GetMapping("/delItem")
 	@Transactional

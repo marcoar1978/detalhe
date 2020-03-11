@@ -68,6 +68,7 @@ public class PedidoController {
 	public ResponseEntity<AberturaPedidoDto> abrirPedido() {
 		Pedido pedido = new Pedido();
 		LocalDate hoje = LocalDate.now();
+		pedido.setDataCad(hoje);
 		pedido.setUsuario(Acesso.getUsuario(usuarioRepository));
 		Pedido pedidoAberto = this.pedidoRepository.save(pedido);
 
@@ -224,6 +225,28 @@ public class PedidoController {
 	}
 
 	@GetMapping
+	@RequestMapping("/cancelarPedido")
+	@Transactional
+	public ResponseEntity<?> cancelarPedido(String pedidoIdForm) {
+		Long pedidoId = Long.parseLong(pedidoIdForm);
+		Pedido pedido = this.pedidoRepository.getPedido(pedidoId);
+		pedido.setStatusPedido(StatusPedido.CANCELADO);
+		return ResponseEntity.ok().build();
+
+	}
+	
+	@GetMapping
+	@RequestMapping("/delPedidosEmAberto")
+	public ResponseEntity<List<Pedido2Dto>> delPedidosEmAberto(){
+		LocalDate data = LocalDate.now().minusDays(2);
+		System.out.println(data);
+		List<Pedido> pedidos = this.pedidoRepository.delPedidosEmAberto(data, StatusPedido.EM_ABERTO);
+		
+		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
+	}
+	
+
+	@GetMapping
 	@RequestMapping("/delItensPorProduto")
 	@Transactional
 	public ResponseEntity<?> delItensPorProduto(String pedidoIdForm) {
@@ -253,7 +276,8 @@ public class PedidoController {
 	@GetMapping
 	@RequestMapping("/consultaPorPaciente")
 	public ResponseEntity<List<Pedido2Dto>> consultaPorPaciente(String nomePaciente) {
-		List<Pedido> pedidos = this.pedidoRepository.consultaPorPaciente(nomePaciente, StatusPedido.EM_ABERTO, StatusPedido.CANCELADO);
+		List<Pedido> pedidos = this.pedidoRepository.consultaPorPaciente(nomePaciente, StatusPedido.EM_ABERTO,
+				StatusPedido.CANCELADO);
 		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
 	}
 
@@ -267,11 +291,13 @@ public class PedidoController {
 		LocalDate dataFim = Data.getDataFim(ano, mes);
 		List<Pedido> pedidos = null;
 		if (clinicaIdForm.equals("todos")) {
-			pedidos = this.pedidoRepository.consultaPorMes(dataInicio, dataFim, StatusPedido.EM_ABERTO, StatusPedido.CANCELADO);
+			pedidos = this.pedidoRepository.consultaPorMes(dataInicio, dataFim, StatusPedido.EM_ABERTO,
+					StatusPedido.CANCELADO);
 		} else {
 			Long clinicaId = Long.parseLong(clinicaIdForm);
 			Clinica clinica = this.clinicaRepository.findById(clinicaId).get();
-			pedidos = this.pedidoRepository.consultaPorClinica(clinica, dataInicio, dataFim, StatusPedido.EM_ABERTO, StatusPedido.CANCELADO);
+			pedidos = this.pedidoRepository.consultaPorClinica(clinica, dataInicio, dataFim, StatusPedido.EM_ABERTO,
+					StatusPedido.CANCELADO);
 		}
 
 		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));

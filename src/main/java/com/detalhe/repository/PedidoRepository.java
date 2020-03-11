@@ -30,4 +30,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	
 	@Query("SELECT p FROM Pedido p WHERE p.dataPedido between :dataInicio and :dataFim  AND p.statusPedido NOT IN (:statusPedidoAberto, :statusPedidoCancelado)")
 	public List<Pedido> consultaPorMes(@Param("dataInicio") LocalDate dataInicio, @Param("dataFim")LocalDate dataFim, @Param("statusPedidoAberto") StatusPedido statusAberto, @Param("statusPedidoCancelado") StatusPedido statusFechado);
+	
+	@Query("SELECT p FROM Pedido p WHERE p.dataCad < :data AND p.statusPedido = :statusEmAberto")
+	public List<Pedido> delPedidosEmAberto(@Param("data") LocalDate data, @Param("statusEmAberto") StatusPedido statusEmAberto);
+	
 	}
