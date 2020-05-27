@@ -302,5 +302,20 @@ public class PedidoController {
 
 		return ResponseEntity.ok(Pedido2Dto.converter(pedidos));
 	}
+	
+	@GetMapping
+	@RequestMapping("/delPedidoEmAberto")
+	@Transactional
+	public ResponseEntity<?> delPedidoEmAberto(){
+		LocalDate data = LocalDate.now().minusDays(2);
+		List<Pedido> pedidos = this.pedidoRepository.delPedidosEmAberto(data, StatusPedido.EM_ABERTO);
+		for(int i = 0; i < pedidos.size(); i++) {
+			Pedido pedido = this.pedidoRepository.getPedido(pedidos.get(i).getId());
+			this.pedidoRepository.deleteById(pedido.getId());
+			}
+		return ResponseEntity.ok().build();
+		
+	}
+	
 
 }

@@ -34,4 +34,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	@Query("SELECT p FROM Pedido p WHERE p.dataCad < :data AND p.statusPedido = :statusEmAberto")
 	public List<Pedido> delPedidosEmAberto(@Param("data") LocalDate data, @Param("statusEmAberto") StatusPedido statusEmAberto);
 	
+	
+	
 	}
