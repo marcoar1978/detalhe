@@ -138,6 +138,8 @@ public class EntregaController {
 		fechamento.setDataCad(addFechamentoForm.getDataFechamento().plusDays(1));
 		fechamento.setDataFechamento(addFechamentoForm.getDataFechamento().plusDays(1));
 		fechamento.setValorTotal(addFechamentoForm.getValorTotal());
+		fechamento.setDesconto(0.0);
+		fechamento.setValorFechamento(addFechamentoForm.getValorTotal());
 		fechamento.setValorPgto(addFechamentoForm.getValorPgto());
 		fechamento.setObs(addFechamentoForm.getObs());
 		fechamento.setUsuario(Acesso.getUsuario(usuarioRepository));

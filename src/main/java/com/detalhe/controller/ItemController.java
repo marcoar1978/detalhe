@@ -33,6 +33,7 @@ import com.detalhe.dto.TipoVariavelDto;
 import com.detalhe.form.AddItemForm;
 import com.detalhe.form.AddItemPadraoForm;
 import com.detalhe.form.AddItemVariavelForm;
+import com.detalhe.form.ObsForm;
 
 @RestController
 @RequestMapping("/item")
@@ -65,6 +66,7 @@ public class ItemController {
 		} else {
 			item.setTipoProduto(TipoProduto.VARIAVEL);
 		}
+		item.setUuid(addItemForm.getUuid());
 		item.setProdutoId(addItemForm.getProdutoId());
 		item.setStatusEntrega(StatusEntrega.NAO);
 		item.setStatusPedido(StatusPedido.EM_ABERTO);
@@ -81,11 +83,8 @@ public class ItemController {
 
 	@GetMapping("/delItem")
 	@Transactional
-	public ResponseEntity<?> delItemVariavel(String pedidoIdForm, String ordemForm) {
-		Long pedidoId = Long.parseLong(pedidoIdForm);
-		Integer ordem = Integer.parseInt(ordemForm);
-
-		Item item = this.itemRepository.getItem(pedidoId, ordem);
+	public ResponseEntity<?> delItemVariavel(String uuid) {
+		Item item = this.itemRepository.findByUuid(uuid).get();
 
 		this.itemRepository.deleteById(item.getId());
 
@@ -97,9 +96,31 @@ public class ItemController {
 	@RequestMapping("/listaTipoVariavel")
 	public ResponseEntity<List<TipoVariavelDto>> listaTipoVariavel() {
 		List<Tipo> tipos = this.tipoRepository.listaTipoVariavel();
-
 		return ResponseEntity.ok(TipoVariavelDto.converter(tipos));
 
 	}
+	
+	@GetMapping
+	@Transactional
+	@RequestMapping("/altDescItem")
+	public ResponseEntity<Item> altDescItem(String uuid, String desconto){
+		Item item = this.itemRepository.findByUuid(uuid).get();
+		item.setDesconto(Double.valueOf(desconto));
+		return ResponseEntity.ok(item);
+	}
+	
+	@PostMapping 
+	@Transactional
+	@RequestMapping("/altObs")
+	public ResponseEntity<?> altObs(@RequestBody ObsForm obsForm){
+		Item item = this.itemRepository.findByUuid(obsForm.getUuid()).get();
+		item.setObs(obsForm.getObs());
+		return ResponseEntity.ok().build();
+		
+	}
+	
+	
+	
+	
 
 }

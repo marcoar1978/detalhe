@@ -22,6 +22,8 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String uuid;	
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "pedido_id")
@@ -32,6 +34,7 @@ public class Item {
 	
 	private Integer produtoId;
 	private String descricao;
+	private String obs;
 	private Integer ordem;
 	
 	@Enumerated
@@ -39,9 +42,10 @@ public class Item {
 	
 	@Enumerated
 	private StatusPedido statusPedido;
-	
+	private Double desconto;
 	private LocalDate dataPedido;
-
+	
+	
 	private Integer qde;
 	private Double valorUnitario;
 	private Double valorTotal;
@@ -142,6 +146,28 @@ public class Item {
 		this.tipoProduto = tipoProduto;
 	}
 
-		
+	public String getUuid() {
+		return uuid;
+	}
 
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public Double getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(Double desconto) {
+		this.desconto = desconto;
+	}
+
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
+	}
+		
 }

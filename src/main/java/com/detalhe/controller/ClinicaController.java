@@ -19,16 +19,15 @@ import com.detalhe.repository.ClinicaRepository;
 @RestController
 @RequestMapping("clinicas")
 public class ClinicaController {
-	
+
 	@Autowired
 	ClinicaRepository clinicaRepository;
-	
+
 	@GetMapping
-	public ResponseEntity<List<ClinicaDto>> lista(){
+	public ResponseEntity<List<ClinicaDto>> lista() {
 		List<Clinica> clinicas = this.clinicaRepository.listaClinicas();
-		
+
 		return ResponseEntity.ok(ClinicaDto.converter(clinicas));
 	}
-	
 
 }

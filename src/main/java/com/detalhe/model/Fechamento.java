@@ -27,6 +27,8 @@ public class Fechamento {
 	private Long id;
 
 	private LocalDate dataFechamento;
+	private Double valorFechamento;
+	private Double desconto;
 	private Double valorTotal;
 	private Double valorPgto;
 
@@ -34,18 +36,17 @@ public class Fechamento {
 	@JoinColumn(name = "clinica_id")
 	private Clinica clinica;
 
-		
 	@OneToMany(mappedBy = "fechamento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Entrega> entregas;
-	
+
 	@OneToMany(mappedBy = "fechamento", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Pgto> pgtos;
-	
+
 	private String obs;
-	
+
 	private LocalDate dataCad;
 	private LocalDate dataAlt;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario")
@@ -138,7 +139,21 @@ public class Fechamento {
 	public void setPgtos(List<Pgto> pgtos) {
 		this.pgtos = pgtos;
 	}
-	
-	
+
+	public Double getValorFechamento() {
+		return valorFechamento;
+	}
+
+	public void setValorFechamento(Double valorFechamento) {
+		this.valorFechamento = valorFechamento;
+	}
+
+	public Double getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(Double desconto) {
+		this.desconto = desconto;
+	}
 
 }

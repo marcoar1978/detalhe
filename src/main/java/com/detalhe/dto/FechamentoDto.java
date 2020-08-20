@@ -12,6 +12,8 @@ public class FechamentoDto {
 	private Long id;
 	private Long clinicaId;
 	private LocalDate dataFechamento;
+	private Double desconto;
+	private Double valorFechamento;
 	private Double valorTotal;
 	private Double valorPgto;
 	private String obs;
@@ -22,6 +24,8 @@ public class FechamentoDto {
 		this.id = fechamento.getId();
 		this.clinicaId = fechamento.getClinica().getId();
 		this.dataFechamento = fechamento.getDataFechamento();
+		this.desconto = fechamento.getDesconto();
+		this.valorFechamento = fechamento.getValorFechamento();
 		this.valorTotal = fechamento.getValorTotal();
 		this.valorPgto = fechamento.getValorPgto();
 		this.obs = fechamento.getObs();
@@ -98,5 +102,23 @@ public class FechamentoDto {
 		return fechamentos.stream().map(FechamentoDto::new).collect(Collectors.toList());
 
 	}
+
+	public Double getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(Double desconto) {
+		this.desconto = desconto;
+	}
+
+	public Double getValorFechamento() {
+		return valorFechamento;
+	}
+
+	public void setValorFechamento(Double valorFechamento) {
+		this.valorFechamento = valorFechamento;
+	}
+	
+	
 
 }
