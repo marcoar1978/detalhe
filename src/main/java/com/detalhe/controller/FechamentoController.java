@@ -113,7 +113,7 @@ public class FechamentoController {
 	public ResponseEntity<?> addDesconto(String fechamentoId, String desconto){
 		Fechamento fechamento = this.fechamentoRepository.findById(Long.valueOf(fechamentoId)).get();
 		fechamento.setDesconto(Double.valueOf(desconto));
-		Double valorLiquido = fechamento.getValorTotal() - Double.valueOf(desconto);
+		Double valorLiquido = fechamento.getValorFechamento() - Double.valueOf(desconto);
 		fechamento.setValorTotal(valorLiquido);
 		return ResponseEntity.ok().build();
 	}
